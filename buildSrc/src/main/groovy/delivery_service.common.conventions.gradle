@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+    id 'io.freefair.lombok'
+}
+
+group = 'com.delivery_service' //프로젝트 그룹명
+version = '0.0.1-SNAPSHOT' //프로젝트 버전
+
+java {
+    sourceCompatibility = '17'
+}
+
+repositories {
+
+    mavenCentral()
+
+}
+
+
+dependencies {
+
+    //테스트용 라이브러리들
+    testImplementation ('org.springframework.boot:spring-boot-starter-test')
+
+}
+
+tasks.named('test', Test) {
+    //jvm에서 테스트 프레임워크 실행 런처
+    useJUnitPlatform()
+}

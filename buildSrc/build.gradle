@@ -1,0 +1,16 @@
+plugins {
+    id 'groovy-gradle-plugin'
+}
+
+//플러그인, 라이브러리 등을 가져올 저장소
+repositories {
+
+    mavenCentral()
+}
+
+dependencies {
+    implementation("org.springframework.boot:org.springframework.boot.gradle.plugin:3.4.0")
+    implementation("io.spring.dependency-management:io.spring.dependency-management.gradle.plugin:1.1.6")
+    implementation("io.freefair.lombok:io.freefair.lombok.gradle.plugin:8.11")
+}
+
