@@ -3,13 +3,11 @@
 rootProject.name = 'delivery_service'
 
 //포한될 프로젝트
-include 'app'
 include 'api'
 include 'services'
 include 'shared'
 
 
-println("setting.gradle : Initialization phase")
 
 
 
