@@ -28,7 +28,7 @@ class TestShopRepositoryTest {
         shop.setName("프랭크 버거");
         shop.setDescription("버거 맛있음");
         shop.setAddress("서울시 강서구 양천로23길 9");
-        shop.set_open(false);
+        shop.setIsOpen(false);
         shop.setCategory("패스트푸드");
         shop.setImage(null);
 
@@ -46,7 +46,7 @@ class TestShopRepositoryTest {
         shop.setName("프랭크 버거");
         shop.setDescription("버거 맛있음");
         shop.setAddress("서울시 강서구 양천로23길 9");
-        shop.set_open(false);
+        shop.setIsOpen(false);
         shop.setCategory("패스트푸드");
         shop.setImage(null);
         repository.save(ownerId,shop);
@@ -57,7 +57,7 @@ class TestShopRepositoryTest {
         updateShop.setName("롯데리아 버거");
         updateShop.setDescription("롯데리아 프랜차이즈");
         updateShop.setAddress("서울시 강서구 양천로 7길 14");
-        updateShop.set_open(false);
+        updateShop.setIsOpen(false);
         updateShop.setCategory("패스트푸드");
         updateShop.setImage(null);
         repository.update(ownerId,updateShop);
@@ -68,7 +68,6 @@ class TestShopRepositoryTest {
         assertThat(foundShop.getAddress()).isEqualTo(updateShop.getAddress());
         assertThat(foundShop.getCategory()).isEqualTo(updateShop.getCategory());
         assertThat(foundShop.getImage()).isEqualTo(updateShop.getImage());
-
     }
 
     @Test
@@ -79,7 +78,7 @@ class TestShopRepositoryTest {
         shop.setName("프랭크 버거");
         shop.setDescription("버거 맛있음");
         shop.setAddress("서울시 강서구 양천로23길 9");
-        shop.set_open(false);
+        shop.setIsOpen(false);
         shop.setCategory("패스트푸드");
         shop.setImage(null);
         repository.save(ownerId,shop);
@@ -89,7 +88,7 @@ class TestShopRepositoryTest {
         repository.updateIsOpen(ownerId,isOpen);
 
         Shop foundShop = repository.findByOwnerId(ownerId).get();
-        assertThat(foundShop.is_open()).isTrue();
+        assertThat(foundShop.getIsOpen()).isTrue();
     }
 
 
