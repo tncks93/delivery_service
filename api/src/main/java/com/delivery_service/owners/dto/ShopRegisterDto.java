@@ -18,7 +18,7 @@ public class ShopRegisterDto {
         shop.setName(name);
         shop.setDescription(description);
         shop.setAddress(address);
-        shop.set_open(false);
+        shop.setIsOpen(false);
         shop.setCategory(category);
 
         return shop;

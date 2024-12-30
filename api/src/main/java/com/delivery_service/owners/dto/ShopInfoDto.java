@@ -7,11 +7,11 @@ import lombok.*;
 @Setter
 @ToString
 public class ShopInfoDto {
-    private int id;
+    private Integer id;
     private String name;
     private String description;
     private String address;
-    private boolean is_open;
+    private Boolean isOpen;
     private String category;
     private String image;
 
@@ -21,7 +21,7 @@ public class ShopInfoDto {
         shop.setName(name);
         shop.setDescription(description);
         shop.setAddress(address);
-        shop.set_open(is_open);
+        shop.setIsOpen(isOpen);
         shop.setCategory(category);
         shop.setImage(image);
 
@@ -34,7 +34,7 @@ public class ShopInfoDto {
         shopInfoDto.setName(shop.getName());
         shopInfoDto.setDescription(shop.getDescription());
         shopInfoDto.setAddress(shop.getAddress());
-        shopInfoDto.set_open(shop.is_open());
+        shopInfoDto.setIsOpen(shop.getIsOpen());
         shopInfoDto.setCategory(shop.getCategory());
         shopInfoDto.setImage(shop.getImage());
 
