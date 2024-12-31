@@ -6,9 +6,9 @@ import java.util.Optional;
 
 public interface ShopRepository {
 
-    public Optional<Shop> findByOwnerId(int ownerId);
-
     public void save(int ownerId, Shop shop);
+
+    public Optional<Shop> findByOwnerId(int ownerId);
 
     public void update(int ownerId, Shop shop);
 
