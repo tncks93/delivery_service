@@ -13,15 +13,15 @@ public class ShopRegisterDto {
     private String address;
     private String category;
 
-    public Shop toShop() {
-        Shop shop = new Shop();
-        shop.setName(name);
-        shop.setDescription(description);
-        shop.setAddress(address);
-        shop.setIsOpen(false);
-        shop.setCategory(category);
+    public Shop convertToEntity() {
+        Shop entity = new Shop();
+        entity.setName(name);
+        entity.setDescription(description);
+        entity.setAddress(address);
+        entity.setIsOpen(false);
+        entity.setCategory(category);
 
-        return shop;
+        return entity;
     }
 
 }

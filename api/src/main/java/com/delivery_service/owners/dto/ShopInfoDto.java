@@ -16,29 +16,29 @@ public class ShopInfoDto {
     private String image;
 
     public Shop convertToEntity() {
-        Shop shop = new Shop();
-        shop.setId(id);
-        shop.setName(name);
-        shop.setDescription(description);
-        shop.setAddress(address);
-        shop.setIsOpen(isOpen);
-        shop.setCategory(category);
-        shop.setImage(image);
+        Shop entity = new Shop();
+        entity.setId(id);
+        entity.setName(name);
+        entity.setDescription(description);
+        entity.setAddress(address);
+        entity.setIsOpen(isOpen);
+        entity.setCategory(category);
+        entity.setImage(image);
 
-        return shop;
+        return entity;
     }
 
-    public ShopInfoDto convertToDto(Shop shop) {
-        ShopInfoDto shopInfoDto = new ShopInfoDto();
-        shopInfoDto.setId(shop.getId());
-        shopInfoDto.setName(shop.getName());
-        shopInfoDto.setDescription(shop.getDescription());
-        shopInfoDto.setAddress(shop.getAddress());
-        shopInfoDto.setIsOpen(shop.getIsOpen());
-        shopInfoDto.setCategory(shop.getCategory());
-        shopInfoDto.setImage(shop.getImage());
+    public static ShopInfoDto convertToDto(Shop entity) {
+        ShopInfoDto dto = new ShopInfoDto();
+        dto.setId(entity.getId());
+        dto.setName(entity.getName());
+        dto.setDescription(entity.getDescription());
+        dto.setAddress(entity.getAddress());
+        dto.setIsOpen(entity.getIsOpen());
+        dto.setCategory(entity.getCategory());
+        dto.setImage(entity.getImage());
 
-        return shopInfoDto;
+        return dto;
     }
 }
 
