@@ -17,7 +17,7 @@ public class OwnerShopRepository {
     public Shop save(Shop shop) {
         Integer shopId = shopIdCounter.incrementAndGet();
         shop.setId(shopId);
-        log.info("shop={} save in OwnerShopRepository", shop);
+        log.debug("shop = {} save in OwnerShopRepository", shop);
         storage.put(shopId, shop);
 
         return storage.get(shopId);
@@ -25,13 +25,13 @@ public class OwnerShopRepository {
 
     public Shop findByShopId(Integer shopId) {
         Shop shop = storage.get(shopId);
-        log.info("shop={} findByOwnerId in OwnerShopRepository", shop);
+        log.debug("shop = {} findByOwnerId in OwnerShopRepository", shop);
 
         return shop;
     }
 
     public Shop update(Integer shopId, Shop shop) {
-        log.info("shop={} update in OwnerShopRepository", shop);
+        log.debug("shop = {} update in OwnerShopRepository", shop);
 
         storage.replace(shopId, shop);
         return storage.get(shopId);
@@ -40,7 +40,7 @@ public class OwnerShopRepository {
     public Boolean updateIsOpen(Integer shopId, Boolean isOpen) {
         Shop shop = storage.get(shopId);
         shop.setIsOpen(isOpen);
-        log.info("shop.isOpen={} updateIsOpen in OwnerShopRepository", shop.getIsOpen());
+        log.debug("shop.isOpen = {} updateIsOpen in OwnerShopRepository", shop.getIsOpen());
 
         return shop.getIsOpen();
     }

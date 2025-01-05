@@ -23,12 +23,12 @@ public class OwnerArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        log.info("OwnerArgumentResolver supportsParameter");
+        log.debug("OwnerArgumentResolver supportsParameter");
         //parameter에 @OwnerLogin annotation 있는지 여부 확인
         boolean hasOwnerLoginAnnotation = parameter.hasParameterAnnotation(OwnerLogin.class);
         //parameter가 Owner 타입인지 확인
         boolean isOwnerType = Owner.class.isAssignableFrom(parameter.getParameterType());
-        log.info("hasOwnerLoginAnnotation == {}, isOwnerType = {}", hasOwnerLoginAnnotation,isOwnerType);
+        log.debug("hasOwnerLoginAnnotation = {}, isOwnerType = {}", hasOwnerLoginAnnotation,isOwnerType);
 
         return hasOwnerLoginAnnotation && isOwnerType;
     }
@@ -44,7 +44,7 @@ public class OwnerArgumentResolver implements HandlerMethodArgumentResolver {
 
         Integer ownerId = (Integer) session.getAttribute("ownerId");
         Owner owner = ownerRepository.findById(ownerId);
-        log.info("owner = {}",owner);
+        log.debug("owner = {}",owner);
         return owner;
 
 
