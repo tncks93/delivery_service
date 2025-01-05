@@ -1,67 +1,70 @@
 package com.delivery_service.owners.controller;
 
-import com.delivery_service.owners.dto.ShopRegisterDto;
+import com.delivery_service.common.response.CommonResponse;
+import com.delivery_service.owners.annotation.OwnerLogin;
 import com.delivery_service.owners.dto.ShopInfoDto;
+import com.delivery_service.owners.dto.ShopRegisterDto;
 import com.delivery_service.owners.dto.ShopStatusDto;
+import com.delivery_service.owners.entity.Owner;
 import com.delivery_service.owners.entity.Shop;
-import com.delivery_service.owners.repository.ShopRepository;
+import com.delivery_service.owners.service.OwnerShopService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @Slf4j
+@AllArgsConstructor
 @RestController
 @RequestMapping("/owners/shops")
 public class OwnerShopController {
 
-    private final ShopRepository shopRepository;
-
-    public OwnerShopController(ShopRepository shopRepository) {
-        this.shopRepository = shopRepository;
-    }
+    private final OwnerShopService ownerShopService;
 
     @PostMapping
-    public ResponseEntity<String> addShop(@SessionAttribute(name = "ownerId", required = false) Integer ownerId, @RequestBody ShopRegisterDto shopRegisterDto) {
-        log.info("ownerId in addShop = {}", ownerId);
-        Shop shop = shopRegisterDto.toShop();
-        log.info("addShop: shop={}",shop);
-        shopRepository.save(ownerId, shop);
+    public ResponseEntity<CommonResponse<ShopInfoDto>> addShop(@OwnerLogin Owner owner, @RequestBody ShopRegisterDto shopRegisterDto) {
+        log.debug("owner = {}, shopRegisterDto = {} addShop in OwnerShopController", owner,shopRegisterDto);
+        Shop savedShop = ownerShopService.addShop(owner, shopRegisterDto.convertToEntity());
 
-        return new ResponseEntity<>("CREATED", HttpStatus.CREATED);
+        CommonResponse<ShopInfoDto> response = new CommonResponse<ShopInfoDto>(CommonResponse.SUCCESS_STATUS,null,ShopInfoDto.convertToDto(savedShop));
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<ShopInfoDto> getShop(@SessionAttribute(name = "ownerId", required = false) Integer ownerId) {
-        log.info("ownerId in getShop = {}", ownerId);
-        Optional<Shop> optionalShop = shopRepository.findByOwnerId(ownerId);
-        Shop shop = optionalShop.get();
-        log.info("getShop: shop={}",shop);
+    public ResponseEntity<CommonResponse<ShopInfoDto>> getShop(@OwnerLogin Owner owner) {
+        log.debug("owner = {} getShop in OwnerShopController", owner);
+        Shop shop = ownerShopService.getShop(owner);
+        log.debug("shop = {} getShop in OwnerShopController",shop);
 
-        ShopInfoDto shopInfoDto = new ShopInfoDto().convertToDto(shop);
-        return new ResponseEntity<>(shopInfoDto, HttpStatus.OK);
+        CommonResponse<ShopInfoDto> response = new CommonResponse<>(CommonResponse.SUCCESS_STATUS,null,ShopInfoDto.convertToDto(shop));
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 
     @PutMapping
-    public ResponseEntity<String> updateShop(@SessionAttribute(name = "ownerId", required = false) Integer ownerId, @RequestBody ShopInfoDto shopInfoDto) {
+    public ResponseEntity<CommonResponse<ShopInfoDto>> updateShop(@OwnerLogin Owner owner, @RequestBody ShopInfoDto shopInfoDto) {
+        log.debug("owner = {} shopInfoDto = {} updateShop in OwnerShopController", owner,shopInfoDto);
+        Shop updatedShop = ownerShopService.updateShop(owner, shopInfoDto.convertToEntity());
+        log.debug("updatedShop = {} updateShop in OwnerShopController",updatedShop);
 
-        shopRepository.update(ownerId,shopInfoDto.convertToEntity());
+        CommonResponse<ShopInfoDto> response = new CommonResponse<>(CommonResponse.SUCCESS_STATUS,null,ShopInfoDto.convertToDto(updatedShop));
 
-        return new ResponseEntity<>("UPDATED", HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 
     @PatchMapping("/status")
-    public ResponseEntity<String> updateShopStatus(@SessionAttribute(name = "ownerId", required = false) Integer ownerId, @RequestBody ShopStatusDto shopStatusDto) {
-        log.info("shopStatus={}",shopStatusDto.toString());
-        shopRepository.updateIsOpen(ownerId, shopStatusDto.getIsOpen());
+    public ResponseEntity<CommonResponse<ShopStatusDto>> updateShopStatus(@OwnerLogin Owner owner, @RequestBody ShopStatusDto shopStatusDto) {
+        log.debug("owner = {} shopStatusDto = {} updateShopStatus in OwnerShopController", owner,shopStatusDto);
+        Boolean isOpen = ownerShopService.updateShopStatus(owner,shopStatusDto.getIsOpen());
+        shopStatusDto.setIsOpen(isOpen);
 
-        return new ResponseEntity<>("UPDATED", HttpStatus.OK);
+        CommonResponse<ShopStatusDto> response = new CommonResponse<>(CommonResponse.SUCCESS_STATUS,null,shopStatusDto);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-
 
 }
