@@ -27,18 +27,17 @@ public class OwnerShopController {
         log.debug("owner = {}, shopRegisterDto = {} addShop in OwnerShopController", owner,shopRegisterDto);
         Shop savedShop = ownerShopService.addShop(owner, shopRegisterDto.convertToEntity());
 
-        CommonResponse<ShopInfoDto> response = new CommonResponse<ShopInfoDto>(CommonResponse.SUCCESS_STATUS,null,ShopInfoDto.convertToDto(savedShop));
+        CommonResponse<ShopInfoDto> response = CommonResponse.success(ShopInfoDto.convertToDto(savedShop));
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping
     public ResponseEntity<CommonResponse<ShopInfoDto>> getShop(@OwnerLogin Owner owner) {
         log.debug("owner = {} getShop in OwnerShopController", owner);
         Shop shop = ownerShopService.getShop(owner);
         log.debug("shop = {} getShop in OwnerShopController",shop);
 
-        CommonResponse<ShopInfoDto> response = new CommonResponse<>(CommonResponse.SUCCESS_STATUS,null,ShopInfoDto.convertToDto(shop));
+        CommonResponse<ShopInfoDto> response = CommonResponse.success(ShopInfoDto.convertToDto(shop));
 
         return new ResponseEntity<>(response, HttpStatus.OK);
 
@@ -50,7 +49,7 @@ public class OwnerShopController {
         Shop updatedShop = ownerShopService.updateShop(owner, shopInfoDto.convertToEntity());
         log.debug("updatedShop = {} updateShop in OwnerShopController",updatedShop);
 
-        CommonResponse<ShopInfoDto> response = new CommonResponse<>(CommonResponse.SUCCESS_STATUS,null,ShopInfoDto.convertToDto(updatedShop));
+        CommonResponse<ShopInfoDto> response = CommonResponse.success(ShopInfoDto.convertToDto(updatedShop));
 
         return new ResponseEntity<>(response, HttpStatus.OK);
 
@@ -62,7 +61,7 @@ public class OwnerShopController {
         Boolean isOpen = ownerShopService.updateShopStatus(owner,shopStatusDto.getIsOpen());
         shopStatusDto.setIsOpen(isOpen);
 
-        CommonResponse<ShopStatusDto> response = new CommonResponse<>(CommonResponse.SUCCESS_STATUS,null,shopStatusDto);
+        CommonResponse<ShopStatusDto> response = CommonResponse.success(shopStatusDto);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
