@@ -19,6 +19,7 @@ public class OwnerShopService {
 //
 //        }
 
+
         Shop savedShop = shopRepository.save(shop);
         ownerRepository.saveShopId(owner,savedShop.getId());
 
@@ -35,6 +36,7 @@ public class OwnerShopService {
 
     public Shop updateShop(Owner owner, Shop shop) {
         //owner가 가지는 shopId 와 요청으로 온 shop의 shopId가 다르면?
+
         return shopRepository.update(owner.getShopId(), shop);
     }
 

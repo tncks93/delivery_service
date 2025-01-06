@@ -32,6 +32,7 @@ public class OwnerShopController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @GetMapping
     public ResponseEntity<CommonResponse<ShopInfoDto>> getShop(@OwnerLogin Owner owner) {
         log.debug("owner = {} getShop in OwnerShopController", owner);
         Shop shop = ownerShopService.getShop(owner);

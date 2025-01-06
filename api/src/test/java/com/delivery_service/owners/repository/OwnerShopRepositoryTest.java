@@ -76,8 +76,8 @@ class OwnerShopRepositoryTest {
     }
 
     @Test
-    @DisplayName("가게 OPEN -> CLOSE")
-    void updateStatusOpenToClose() {
+    @DisplayName("가게 CLOSE -> OPEN")
+    void updateStatusCloseToOpen() {
         Shop savedShop = repository.save(createShopObject());
         boolean isOpen = true;
 
@@ -89,7 +89,7 @@ class OwnerShopRepositoryTest {
 
     @Test
     @DisplayName("가게 OPEN -> CLOSE")
-    void updateStatusCloseToOpen() {
+    void updateStatusOpenToClose() {
         Shop savedShop = repository.save(createShopObject());
         boolean isOpen = false;
 
