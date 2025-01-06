@@ -2,9 +2,11 @@ package com.delivery_service.common.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 //@AllArgsConstructor
+@NoArgsConstructor
 public class CommonResponse<T> {
 
     private static final String SUCCESS_STATUS = "success";
