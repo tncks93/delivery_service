@@ -27,7 +27,6 @@ public class OwnerArgumentResolver implements HandlerMethodArgumentResolver {
 
   @Override
   public boolean supportsParameter(MethodParameter parameter) {
-    log.debug("OwnerArgumentResolver supportsParameter");
     //parameter에 @OwnerLogin annotation 있는지 여부 확인
     boolean hasOwnerLoginAnnotation = parameter.hasParameterAnnotation(OwnerLogin.class);
     //parameter가 Owner 타입인지 확인

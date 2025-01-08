@@ -31,7 +31,7 @@ public class OwnerShopController {
   @PostMapping
   public ResponseEntity<CommonResponse<ShopInfoDto>> addShop(@OwnerLogin Owner owner,
       @RequestBody ShopRegisterDto shopRegisterDto) {
-    log.debug("owner = {}, shopRegisterDto = {} addShop in OwnerShopController", owner,
+    log.debug("owner = {}, shopRegisterDto = {}", owner,
         shopRegisterDto);
     Shop savedShop = ownerShopService.addShop(owner, shopRegisterDto.convertToEntity());
 
@@ -43,9 +43,9 @@ public class OwnerShopController {
 
   @GetMapping
   public ResponseEntity<CommonResponse<ShopInfoDto>> getShop(@OwnerLogin Owner owner) {
-    log.debug("owner = {} getShop in OwnerShopController", owner);
+    log.debug("owner = {}", owner);
     Shop shop = ownerShopService.getShop(owner);
-    log.debug("shop = {} getShop in OwnerShopController", shop);
+    log.debug("shop = {}", shop);
 
     CommonResponse<ShopInfoDto> response = CommonResponse.success(ShopInfoDto.convertToDto(shop));
 
@@ -56,9 +56,9 @@ public class OwnerShopController {
   @PutMapping
   public ResponseEntity<CommonResponse<ShopInfoDto>> updateShop(@OwnerLogin Owner owner,
       @RequestBody ShopInfoDto shopInfoDto) {
-    log.debug("owner = {} shopInfoDto = {} updateShop in OwnerShopController", owner, shopInfoDto);
+    log.debug("owner = {} shopInfoDto = {}", owner, shopInfoDto);
     Shop updatedShop = ownerShopService.updateShop(owner, shopInfoDto.convertToEntity());
-    log.debug("updatedShop = {} updateShop in OwnerShopController", updatedShop);
+    log.debug("updatedShop = {}", updatedShop);
 
     CommonResponse<ShopInfoDto> response = CommonResponse.success(
         ShopInfoDto.convertToDto(updatedShop));
@@ -70,7 +70,7 @@ public class OwnerShopController {
   @PatchMapping("/status")
   public ResponseEntity<CommonResponse<ShopStatusDto>> updateShopStatus(@OwnerLogin Owner owner,
       @RequestBody ShopStatusDto shopStatusDto) {
-    log.debug("owner = {} shopStatusDto = {} updateShopStatus in OwnerShopController", owner,
+    log.debug("owner = {} shopStatusDto = {}", owner,
         shopStatusDto);
     Boolean isOpen = ownerShopService.updateShopStatus(owner, shopStatusDto.getIsOpen());
     shopStatusDto.setIsOpen(isOpen);
