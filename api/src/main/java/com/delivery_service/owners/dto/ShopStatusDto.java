@@ -10,8 +10,9 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 public class ShopStatusDto {
-    Integer shopId;
-    Boolean isOpen;
+
+  Integer id;
+  Boolean isOpen;
 }
 
 

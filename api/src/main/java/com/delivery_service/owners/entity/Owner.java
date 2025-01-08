@@ -6,15 +6,16 @@ import lombok.ToString;
 @Getter
 @ToString
 public class Owner {
-    private Integer id;
-    private Integer shopId;
 
-    public Owner(Integer id) {
-        this.id = id;
-    }
+  private Integer id;
+  private Integer shopId;
 
-    public void setShopId(Integer shopId) {
-        this.shopId = shopId;
-    }
+  public Owner(Integer id) {
+    this.id = id;
+  }
+
+  public void setShopId(Integer shopId) {
+    this.shopId = shopId;
+  }
 
 }

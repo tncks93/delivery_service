@@ -13,16 +13,14 @@ java {
 }
 
 repositories {
-
     mavenCentral()
-
 }
 
 
 dependencies {
 
     //테스트용 라이브러리들
-    testImplementation ('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
 
 }
 

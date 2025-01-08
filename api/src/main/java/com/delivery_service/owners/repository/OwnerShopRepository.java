@@ -47,6 +47,6 @@ public class OwnerShopRepository {
 
     public void clear() {
         storage.clear();
-//        ownerToShopId.clear();
+        shopIdCounter.set(0);
     }
 }

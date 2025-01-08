@@ -1,11 +1,9 @@
 plugins {
     id 'delivery_service.common.conventions'
-
 }
 
 
 dependencies {
-
     implementation 'org.springframework.boot:spring-boot-starter-web'
 }
 
