@@ -1,7 +1,6 @@
 package com.delivery_service.owners.repository;
 
 import com.delivery_service.owners.entity.Owner;
-import jakarta.annotation.PostConstruct;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import org.springframework.stereotype.Repository;
@@ -11,8 +10,7 @@ public class OwnerRepository {
 
   private final ConcurrentMap<Integer, Owner> owners = new ConcurrentHashMap<>();
 
-  @PostConstruct
-  public void setOwners() {
+  public OwnerRepository() {
     Owner owner1 = new Owner(1);
     Owner owner2 = new Owner(2);
 
