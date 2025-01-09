@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class OwnerShopService {
 
+  //TODO
+  //ownerService 구현하고, service에서 service를 의존하지 않도록 변경 예정
   private final OwnerRepository ownerRepository;
   private final OwnerShopRepository shopRepository;
 
@@ -21,7 +23,7 @@ public class OwnerShopService {
 //        }
 
     Shop savedShop = shopRepository.save(shop);
-    ownerRepository.saveShopId(owner, savedShop.getId());
+//    ownerRepository.saveShopId(owner, savedShop.getId());
 
     return savedShop;
   }

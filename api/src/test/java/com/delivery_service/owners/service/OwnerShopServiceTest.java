@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import com.delivery_service.owners.dto.ShopRegisterDto;
 import com.delivery_service.owners.entity.Owner;
 import com.delivery_service.owners.entity.Shop;
-import com.delivery_service.owners.repository.OwnerRepository;
 import com.delivery_service.owners.repository.OwnerShopRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,9 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class OwnerShopServiceTest {
-
-  @Mock
-  OwnerRepository ownerRepository;
 
   @Mock
   OwnerShopRepository ownerShopRepository;
@@ -39,13 +35,10 @@ class OwnerShopServiceTest {
     registerDto.setCategory("패스트푸드");
     Shop shopToSave = registerDto.convertToEntity();
     Owner owner = new Owner(1);
-    when(ownerShopRepository.save(any(Shop.class))).thenAnswer(invocation -> {
-      int mockedShopId = 1;
-      Shop shop = invocation.getArgument(0);
-      shop.setId(mockedShopId);
 
-      return shop;
-    });
+    Shop savedShop = registerDto.convertToEntity();
+    savedShop.setId(1);
+    when(ownerShopRepository.save(any(Shop.class))).thenReturn(savedShop);
 
     //when
     Shop addedShop = ownerShopService.addShop(owner, shopToSave);
