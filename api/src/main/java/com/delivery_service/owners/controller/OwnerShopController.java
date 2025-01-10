@@ -7,7 +7,7 @@ import com.delivery_service.owners.dto.ShopRegisterDto;
 import com.delivery_service.owners.dto.ShopStatusDto;
 import com.delivery_service.owners.entity.Owner;
 import com.delivery_service.owners.entity.Shop;
-import com.delivery_service.owners.service.OwnerShopService;
+import com.delivery_service.owners.facade.OwnerShopFacade;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,14 +26,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/owners/shops")
 public class OwnerShopController {
 
-  private final OwnerShopService ownerShopService;
+  private final OwnerShopFacade ownerShopFacade;
 
   @PostMapping
   public ResponseEntity<CommonResponse<ShopInfoDto>> addShop(@OwnerLogin Owner owner,
       @RequestBody ShopRegisterDto shopRegisterDto) {
     log.debug("owner = {}, shopRegisterDto = {}", owner,
         shopRegisterDto);
-    Shop savedShop = ownerShopService.addShop(owner, shopRegisterDto.convertToEntity());
+    Shop savedShop = ownerShopFacade.addShop(owner, shopRegisterDto.convertToEntity());
 
     CommonResponse<ShopInfoDto> response = CommonResponse.success(
         ShopInfoDto.convertToDto(savedShop));
@@ -44,7 +44,7 @@ public class OwnerShopController {
   @GetMapping
   public ResponseEntity<CommonResponse<ShopInfoDto>> getShop(@OwnerLogin Owner owner) {
     log.debug("owner = {}", owner);
-    Shop shop = ownerShopService.getShop(owner);
+    Shop shop = ownerShopFacade.getShop(owner);
     log.debug("shop = {}", shop);
 
     CommonResponse<ShopInfoDto> response = CommonResponse.success(ShopInfoDto.convertToDto(shop));
@@ -57,7 +57,7 @@ public class OwnerShopController {
   public ResponseEntity<CommonResponse<ShopInfoDto>> updateShop(@OwnerLogin Owner owner,
       @RequestBody ShopInfoDto shopInfoDto) {
     log.debug("owner = {} shopInfoDto = {}", owner, shopInfoDto);
-    Shop updatedShop = ownerShopService.updateShop(owner, shopInfoDto.convertToEntity());
+    Shop updatedShop = ownerShopFacade.updateShop(owner, shopInfoDto.convertToEntity());
     log.debug("updatedShop = {}", updatedShop);
 
     CommonResponse<ShopInfoDto> response = CommonResponse.success(
@@ -72,7 +72,7 @@ public class OwnerShopController {
       @RequestBody ShopStatusDto shopStatusDto) {
     log.debug("owner = {} shopStatusDto = {}", owner,
         shopStatusDto);
-    Boolean isOpen = ownerShopService.updateShopStatus(owner, shopStatusDto.getIsOpen());
+    Boolean isOpen = ownerShopFacade.updateShopStatus(owner, shopStatusDto.getIsOpen());
     shopStatusDto.setIsOpen(isOpen);
 
     CommonResponse<ShopStatusDto> response = CommonResponse.success(shopStatusDto);

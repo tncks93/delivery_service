@@ -22,7 +22,7 @@ public class OwnerRepository {
     return owners.get(id);
   }
 
-  public void saveShopId(Owner owner, Integer shopId) {
-    owners.get(owner.getId()).setShopId(shopId);
+  public void update(Owner owner) {
+    owners.replace(owner.getId(), owner);
   }
 }
