@@ -2,9 +2,10 @@ package com.delivery_service.owners.resolver;
 
 import com.delivery_service.owners.annotation.OwnerLogin;
 import com.delivery_service.owners.entity.Owner;
-import com.delivery_service.owners.repository.OwnerRepository;
+import com.delivery_service.owners.service.OwnerService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Base64;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -16,14 +17,11 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
 @Slf4j
+@AllArgsConstructor
 public class OwnerArgumentResolver implements HandlerMethodArgumentResolver {
 
-  private final OwnerRepository ownerRepository;
+  private final OwnerService ownerService;
   private final String TYPE_OWNER = "owner";
-
-  public OwnerArgumentResolver(OwnerRepository ownerRepository) {
-    this.ownerRepository = ownerRepository;
-  }
 
   @Override
   public boolean supportsParameter(MethodParameter parameter) {
@@ -58,7 +56,7 @@ public class OwnerArgumentResolver implements HandlerMethodArgumentResolver {
 
       //userType(Customer,Owner,Rider) 별로 추후 구분할수 있게 구현 필요
       if (userType.equals(TYPE_OWNER)) {
-        return ownerRepository.findById(userId);
+        return ownerService.getOwner(userId);
       }
 
       return null;
