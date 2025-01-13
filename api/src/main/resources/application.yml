@@ -13,6 +13,10 @@ spring:
       hibernate:
         format_sql: true #sql 포맷하여 출력
 
+  sql:
+    init:
+      mode: always
+
   data:
     redis:
       host: localhost
