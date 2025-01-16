@@ -4,10 +4,10 @@ CREATE TABLE IF NOT EXISTS shop (
                       name VARCHAR(20) NOT NULL,
                       address VARCHAR(255) NOT NULL,
                       description TEXT NOT NULL,
-                      latitude VARCHAR(20) NOT NULL,
-                      longitude VARCHAR(20) NOT NULL,
+                      latitude VARCHAR(20),
+                      longitude VARCHAR(20),
                       category VARCHAR(20) NOT NULL,
-                      image VARCHAR(255) NOT NULL,
+                      image VARCHAR(255),
                       is_open BOOLEAN DEFAULT FALSE
 );
 
