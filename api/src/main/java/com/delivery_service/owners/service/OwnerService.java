@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class OwnerService {
 
-  private final OwnerRepository ownerRepository;
+  private final OwnerRepository repository;
 
   public Owner getOwner(Integer ownerId) {
-    return ownerRepository.findById(ownerId);
+    return repository.findById(ownerId).get();
   }
 
   public void updateOwner(Owner owner) {
-    ownerRepository.update(owner);
+    repository.save(owner);
   }
 }
