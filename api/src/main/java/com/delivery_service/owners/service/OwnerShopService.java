@@ -5,12 +5,13 @@ import com.delivery_service.owners.entity.Shop;
 import com.delivery_service.owners.repository.OwnerShopRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
 public class OwnerShopService {
 
-  private final OwnerShopRepository shopRepository;
+  private final OwnerShopRepository repository;
 
   public Shop addShop(Owner owner, Shop shop) {
     //이미 shop을 가지고 있을 경우?
@@ -18,7 +19,7 @@ public class OwnerShopService {
 //
 //        }
 
-    Shop savedShop = shopRepository.save(shop);
+    Shop savedShop = repository.save(shop);
 
     return savedShop;
   }
@@ -28,17 +29,20 @@ public class OwnerShopService {
 //        if(owner.getShopId() == null){
 //
 //        }
-    return shopRepository.findByShopId(owner.getShopId());
+    return repository.findById(owner.getShopId()).get();
   }
 
   public Shop updateShop(Owner owner, Shop shop) {
     //owner가 가지는 shopId 와 요청으로 온 shop의 shopId가 다르면?
 
-    return shopRepository.update(owner.getShopId(), shop);
+    return repository.save(shop);
   }
 
+  @Transactional
   public Boolean updateShopStatus(Owner owner, Boolean isOpen) {
-    return shopRepository.updateIsOpen(owner.getShopId(), isOpen);
+    Shop shop = repository.findById(owner.getShopId()).get();
+    shop.setIsOpen(isOpen);
+    return shop.getIsOpen();
   }
 
 }

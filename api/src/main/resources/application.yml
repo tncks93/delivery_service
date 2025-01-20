@@ -6,12 +6,13 @@ spring:
     password: delivery_user0913
 
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: validate #Entity와의 매핑 판단만 테이블 변경x
     properties:
       hibernate:
-        format_sql: true #sql 포맷하여 출력
+        show_sql: false
+        format_sql: true
+
 
   sql:
     init:

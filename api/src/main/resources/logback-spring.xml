@@ -9,7 +9,10 @@
     </encoder>
   </appender>
 
-  <logger name="com.delivery_service" level="debug">
+  <logger name="org.hibernate.SQL" level="DEBUG">
+    <appender-ref ref="STDOUT"/>
+  </logger>
+  <logger name="com.delivery_service" level="DEBUG">
     <appender-ref ref="STDOUT"/>
   </logger>
 
