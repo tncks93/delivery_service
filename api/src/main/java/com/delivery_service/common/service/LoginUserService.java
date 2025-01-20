@@ -9,14 +9,14 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class LoginUserService {
 
-  private final LoginUserRepository loginUserRepository;
+  private final LoginUserRepository repository;
 
   public LoginUser saveLoginUser(LoginUser loginUser) {
-    return loginUserRepository.save(loginUser);
+    return repository.save(loginUser);
   }
 
   public LoginUser getLoginUser(String token) {
-    return loginUserRepository.findById(token).get();
+    return repository.findById(token).get();
   }
 
 }
