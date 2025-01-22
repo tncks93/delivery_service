@@ -24,4 +24,6 @@ CREATE TABLE IF NOT EXISTS login_user
     user_id INT         NOT NULL
 )
 
+ALTER TABLE owner AUTO_INCREMENT = 1;
+
 
