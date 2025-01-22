@@ -1,7 +1,7 @@
 package com.delivery_service.common.service;
 
 import com.delivery_service.common.UserRole;
-import com.delivery_service.common.entity.LoginUserInfo;
+import com.delivery_service.common.dto.LoginUserInfo;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;

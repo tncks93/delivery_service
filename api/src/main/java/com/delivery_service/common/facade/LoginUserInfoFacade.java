@@ -1,10 +1,11 @@
 package com.delivery_service.common.facade;
 
 import com.delivery_service.common.UserRole;
+import com.delivery_service.common.dto.LoginUserInfo;
 import com.delivery_service.common.entity.LoginUser;
-import com.delivery_service.common.entity.LoginUserInfo;
 import com.delivery_service.common.service.LoginUserInfoCacheService;
 import com.delivery_service.common.service.LoginUserService;
+import com.delivery_service.owners.entity.Owner;
 import com.delivery_service.owners.service.OwnerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ public class LoginUserInfoFacade {
   private final OwnerService ownerService;
 
 
-  public <T> LoginUserInfo<T> getLoginUserInfo(UserRole userRole, String token) {
+  public <T> LoginUserInfo<T> getLoginUserInfo(UserRole userRole, String token, Class<T> clazz) {
 
     LoginUserInfo<T> cache = loginUserInfoCacheService.getLoginUserInfo(token, userRole);
     if (cache != null) {
@@ -36,7 +37,8 @@ public class LoginUserInfoFacade {
       T user = null;
       switch (userRole) {
         case Owner:
-          user = (T) ownerService.getOwner(loginUser.getUserId());
+          Owner owner = ownerService.getOwner(loginUser.getUserId());
+          user = clazz.cast(owner);
 
         case Customer:
 
@@ -47,15 +49,15 @@ public class LoginUserInfoFacade {
 
       }
 
-      return new LoginUserInfo<>(loginUser, user);
+      return new LoginUserInfo<T>(loginUser, user);
+
     }
 
     //캐시,db 둘 다 없을때
     return null;
   }
 
-  public <T> T saveLoginUserInfo(UserRole userRole, String token,
-      Integer userId) {
+  public <T> T saveLoginUserInfo(UserRole userRole, String token, Class<T> clazz, Integer userId) {
     LoginUser loginUser = new LoginUser(token, userRole, userId);
 
     //db저장
@@ -63,7 +65,7 @@ public class LoginUserInfoFacade {
     T user = null;
     switch (userRole) {
       case Owner:
-        user = (T) ownerService.getOwner(userId);
+        user = clazz.cast(ownerService.getOwner(userId));
         break;
       case Customer:
         break;
@@ -71,6 +73,7 @@ public class LoginUserInfoFacade {
         break;
 
     }
+    log.debug("user={}", user);
 
     LoginUserInfo<T> loginUserInfo = new LoginUserInfo<>(loginUser, user);
 

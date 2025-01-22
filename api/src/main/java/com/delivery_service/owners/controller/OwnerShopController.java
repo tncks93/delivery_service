@@ -2,9 +2,7 @@ package com.delivery_service.owners.controller;
 
 import com.delivery_service.common.UserRole;
 import com.delivery_service.common.annotation.User;
-import com.delivery_service.common.entity.LoginUserInfo;
 import com.delivery_service.common.response.CommonResponse;
-import com.delivery_service.common.service.LoginUserInfoCacheService;
 import com.delivery_service.owners.dto.ShopInfoDto;
 import com.delivery_service.owners.dto.ShopRegisterDto;
 import com.delivery_service.owners.dto.ShopStatusDto;
@@ -30,19 +28,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class OwnerShopController {
 
   private final OwnerShopFacade ownerShopFacade;
-  private final LoginUserInfoCacheService loginUserInfoCacheService;
+
 
   @PostMapping
   public ResponseEntity<CommonResponse<ShopInfoDto>> addShop(
-      @User(role = UserRole.Owner) LoginUserInfo<Owner> ownerInfo,
+      @User(role = UserRole.Owner) Owner owner,
       @RequestBody ShopRegisterDto shopRegisterDto) {
-    log.debug("ownerInfo = {}, shopRegisterDto = {}", ownerInfo,
-        shopRegisterDto);
-    Shop savedShop = ownerShopFacade.addShop(ownerInfo.getUser(),
-        shopRegisterDto.convertToEntity());
-
-    //Facade에 합쳐야 하는가
-    loginUserInfoCacheService.saveLoginUserInfo(ownerInfo.getLoginUser().getToken(), ownerInfo);
+    log.debug("owner = {}, shopRegisterDto = {}", owner, shopRegisterDto);
+    Shop savedShop = ownerShopFacade.addShop(owner, shopRegisterDto.convertToEntity());
 
     CommonResponse<ShopInfoDto> response = CommonResponse.success(
         ShopInfoDto.convertToDto(savedShop));
@@ -52,13 +45,13 @@ public class OwnerShopController {
 
   @GetMapping
   public ResponseEntity<CommonResponse<ShopInfoDto>> getShop(
-      @User(role = UserRole.Owner) LoginUserInfo<Owner> ownerInfo) {
-    Owner owner = ownerInfo.getUser();
+      @User(role = UserRole.Owner) Owner owner) {
     log.debug("owner = {}", owner);
     Shop shop = ownerShopFacade.getShop(owner);
     log.debug("shop = {}", shop);
 
-    CommonResponse<ShopInfoDto> response = CommonResponse.success(ShopInfoDto.convertToDto(shop));
+    CommonResponse<ShopInfoDto> response = CommonResponse.success(
+        ShopInfoDto.convertToDto(shop));
 
     return new ResponseEntity<>(response, HttpStatus.OK);
 
@@ -66,9 +59,8 @@ public class OwnerShopController {
 
   @PutMapping
   public ResponseEntity<CommonResponse<ShopInfoDto>> updateShop(
-      @User(role = UserRole.Owner) LoginUserInfo<Owner> ownerInfo,
+      @User(role = UserRole.Owner) Owner owner,
       @RequestBody ShopInfoDto shopInfoDto) {
-    Owner owner = ownerInfo.getUser();
     log.debug("owner = {} shopInfoDto = {}", owner, shopInfoDto);
     Shop updatedShop = ownerShopFacade.updateShop(owner, shopInfoDto.convertToEntity());
     log.debug("updatedShop = {}", updatedShop);
@@ -82,9 +74,8 @@ public class OwnerShopController {
 
   @PatchMapping("/status")
   public ResponseEntity<CommonResponse<ShopStatusDto>> updateShopStatus(
-      @User(role = UserRole.Owner) LoginUserInfo<Owner> ownerInfo,
+      @User(role = UserRole.Owner) Owner owner,
       @RequestBody ShopStatusDto shopStatusDto) {
-    Owner owner = ownerInfo.getUser();
     log.debug("owner = {} shopStatusDto = {}", owner,
         shopStatusDto);
     Boolean isOpen = ownerShopFacade.updateShopStatus(owner, shopStatusDto.getIsOpen());
