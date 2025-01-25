@@ -1,3 +1,3 @@
-INSERT INTO owner (id, shop_id)
-VALUES (1, NULL),
-       (2, NULL);
+INSERT INTO owner (shop_id)
+VALUES (NULL),
+       (NULL);

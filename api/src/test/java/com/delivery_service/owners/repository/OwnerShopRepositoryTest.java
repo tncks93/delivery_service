@@ -3,18 +3,22 @@ package com.delivery_service.owners.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.delivery_service.owners.entity.Shop;
-import org.junit.jupiter.api.AfterEach;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.jdbc.Sql;
 
+@DataJpaTest
+@Slf4j
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Sql(scripts = "/before-test.sql")
 class OwnerShopRepositoryTest {
 
-  private OwnerShopRepository repository = new OwnerShopRepository();
-
-  @AfterEach
-  void afterEach() {
-    repository.clear();
-  }
+  @Autowired
+  private OwnerShopRepository repository;
 
   @Test
   @DisplayName("가게 등록")
@@ -23,6 +27,7 @@ class OwnerShopRepositoryTest {
     Shop shop = createShopObject();
 
     Shop savedShop = repository.save(shop);
+    log.debug("savedShop={}", savedShop);
 
     assertThat(savedShop.getId()).isNotNull();
     assertThat(savedShop.getName()).isEqualTo(shop.getName());
@@ -39,7 +44,8 @@ class OwnerShopRepositoryTest {
   void findByShopId() {
     Shop savedShop = repository.save(createShopObject());
 
-    Shop foundShop = repository.findByShopId(savedShop.getId());
+    Shop foundShop = repository.findById(savedShop.getId()).get();
+    log.debug("foundShop={}", foundShop);
 
     assertThat(foundShop).isNotNull();
     assertThat(foundShop.getId()).isEqualTo(savedShop.getId());
@@ -57,23 +63,22 @@ class OwnerShopRepositoryTest {
   void update() {
     Shop savedShop = repository.save(createShopObject());
 
-    Shop shop = new Shop();
-    shop.setId(savedShop.getId());
-    shop.setName("롯데리아 버거");
-    shop.setDescription("롯데리아 프랜차이즈");
-    shop.setAddress("서울시 강서구 양천로 7길 14");
-    shop.setIsOpen(false);
-    shop.setCategory("패스트푸드");
-    shop.setImage(null);
-    Shop updatedShop = repository.update(savedShop.getId(), shop);
+    savedShop.setName("롯데리아 버거");
+    savedShop.setDescription("롯데리아 프랜차이즈");
+    savedShop.setAddress("서울시 강서구 양천로 7길 14");
+    savedShop.setIsOpen(false);
+    savedShop.setCategory("패스트푸드");
+    savedShop.setImage(null);
+    log.debug("savedShop={}", savedShop);
 
+    Shop updatedShop = repository.findById(savedShop.getId()).get();
     assertThat(updatedShop).isNotNull();
     assertThat(updatedShop.getId()).isEqualTo(savedShop.getId());
-    assertThat(updatedShop.getName()).isEqualTo(shop.getName());
-    assertThat(updatedShop.getDescription()).isEqualTo(shop.getDescription());
-    assertThat(updatedShop.getAddress()).isEqualTo(shop.getAddress());
-    assertThat(updatedShop.getCategory()).isEqualTo(shop.getCategory());
-    assertThat(updatedShop.getImage()).isEqualTo(shop.getImage());
+    assertThat(updatedShop.getName()).isEqualTo(savedShop.getName());
+    assertThat(updatedShop.getDescription()).isEqualTo(savedShop.getDescription());
+    assertThat(updatedShop.getAddress()).isEqualTo(savedShop.getAddress());
+    assertThat(updatedShop.getCategory()).isEqualTo(savedShop.getCategory());
+    assertThat(updatedShop.getImage()).isEqualTo(savedShop.getImage());
   }
 
   @Test
@@ -82,9 +87,12 @@ class OwnerShopRepositoryTest {
     Shop savedShop = repository.save(createShopObject());
     boolean isOpen = true;
 
-    repository.updateIsOpen(savedShop.getId(), isOpen);
+    savedShop.setIsOpen(isOpen);
+    repository.save(savedShop);
 
-    Shop foundShop = repository.findByShopId(savedShop.getId());
+    Shop foundShop = repository.findById(savedShop.getId()).get();
+    log.debug("foundShop={}", foundShop);
+
     assertThat(foundShop.getIsOpen()).isTrue();
   }
 
@@ -93,10 +101,12 @@ class OwnerShopRepositoryTest {
   void updateStatusOpenToClose() {
     Shop savedShop = repository.save(createShopObject());
     boolean isOpen = false;
+    savedShop.setIsOpen(isOpen);
+    repository.save(savedShop);
 
-    repository.updateIsOpen(savedShop.getId(), isOpen);
+    Shop foundShop = repository.findById(savedShop.getId()).get();
+    log.debug("foundShop={}", foundShop);
 
-    Shop foundShop = repository.findByShopId(savedShop.getId());
     assertThat(foundShop.getIsOpen()).isFalse();
   }
 

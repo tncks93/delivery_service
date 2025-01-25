@@ -8,6 +8,7 @@ import com.delivery_service.owners.dto.ShopRegisterDto;
 import com.delivery_service.owners.entity.Owner;
 import com.delivery_service.owners.entity.Shop;
 import com.delivery_service.owners.repository.OwnerShopRepository;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,21 +58,22 @@ class OwnerShopServiceTest {
   void getShop() {
     //given
     Shop mockedShop = createMockShop();
+    Optional<Shop> optionalShop = Optional.of(mockedShop);
     Owner mockedOwner = new Owner(1);
     mockedOwner.setShopId(1);
 
-    when(ownerShopRepository.findByShopId(any(Integer.class))).thenReturn(mockedShop);
-
+    when(ownerShopRepository.findById(any(Integer.class))).thenReturn(optionalShop);
+    Shop shop = optionalShop.get();
     //when
     Shop foundShop = ownerShopService.getShop(mockedOwner);
 
     //then
-    assertThat(foundShop.getId()).isEqualTo(mockedShop.getId());
-    assertThat(foundShop.getName()).isEqualTo(mockedShop.getName());
-    assertThat(foundShop.getDescription()).isEqualTo(mockedShop.getDescription());
-    assertThat(foundShop.getAddress()).isEqualTo(mockedShop.getAddress());
-    assertThat(foundShop.getCategory()).isEqualTo(mockedShop.getCategory());
-    assertThat(foundShop.getIsOpen()).isEqualTo(mockedShop.getIsOpen());
+    assertThat(foundShop.getId()).isEqualTo(shop.getId());
+    assertThat(foundShop.getName()).isEqualTo(shop.getName());
+    assertThat(foundShop.getDescription()).isEqualTo(shop.getDescription());
+    assertThat(foundShop.getAddress()).isEqualTo(shop.getAddress());
+    assertThat(foundShop.getCategory()).isEqualTo(shop.getCategory());
+    assertThat(foundShop.getIsOpen()).isEqualTo(shop.getIsOpen());
   }
 
   @Test
@@ -82,7 +84,7 @@ class OwnerShopServiceTest {
     Owner mockedOwner = new Owner(1);
     mockedOwner.setShopId(1);
 
-    when(ownerShopRepository.update(any(Integer.class), any(Shop.class))).thenReturn(mockedShop);
+    when(ownerShopRepository.findById(any(Integer.class))).thenReturn(Optional.of(mockedShop));
 
     //when
     Shop updatedShop = ownerShopService.updateShop(mockedOwner, mockedShop);
@@ -105,9 +107,9 @@ class OwnerShopServiceTest {
     Owner mockedOwner = new Owner(1);
     mockedOwner.setShopId(1);
     Boolean isOpen = false;
+    Shop mockedShop = createMockShop();
 
-    when(ownerShopRepository.updateIsOpen(any(Integer.class), any(Boolean.class))).thenReturn(
-        false);
+    when(ownerShopRepository.findById(any(Integer.class))).thenReturn(Optional.of(mockedShop));
 
     //when
     Boolean result = ownerShopService.updateShopStatus(mockedOwner, isOpen);
@@ -123,8 +125,9 @@ class OwnerShopServiceTest {
     Owner mockedOwner = new Owner(1);
     mockedOwner.setShopId(1);
     Boolean isOpen = true;
+    Shop mockedShop = createMockShop();
 
-    when(ownerShopRepository.updateIsOpen(any(Integer.class), any(Boolean.class))).thenReturn(true);
+    when(ownerShopRepository.findById(any(Integer.class))).thenReturn(Optional.of(mockedShop));
 
     //when
     Boolean result = ownerShopService.updateShopStatus(mockedOwner, isOpen);

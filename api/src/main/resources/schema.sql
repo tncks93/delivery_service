@@ -22,8 +22,6 @@ CREATE TABLE IF NOT EXISTS login_user
     token   VARCHAR(36) PRIMARY KEY,
     role    VARCHAR(10) NOT NULL,
     user_id INT         NOT NULL
-)
-
-ALTER TABLE owner AUTO_INCREMENT = 1;
+);
 
 
