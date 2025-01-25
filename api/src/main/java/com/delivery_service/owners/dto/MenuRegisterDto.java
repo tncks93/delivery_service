@@ -17,6 +17,7 @@ public class MenuRegisterDto {
     entity.setDescription(description);
     entity.setPrice(price);
     entity.setImage(image);
+    entity.setIsOnSale(true);
 
     return entity;
   }
