@@ -11,9 +11,11 @@ import com.delivery_service.owners.service.OwnerService;
 import com.delivery_service.owners.service.OwnerShopService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @AllArgsConstructor
 @Component
+@Transactional
 public class OwnerShopFacade {
 
   private final OwnerService ownerService;

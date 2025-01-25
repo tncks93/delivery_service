@@ -10,6 +10,7 @@ import com.delivery_service.owners.service.OwnerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @AllArgsConstructor
@@ -20,7 +21,7 @@ public class LoginUserInfoFacade {
   private final LoginUserService loginUserService;
   private final OwnerService ownerService;
 
-
+  @Transactional
   public <T> LoginUserInfo<T> getLoginUserInfo(UserRole userRole, String token, Class<T> clazz) {
 
     LoginUserInfo<T> cache = loginUserInfoCacheService.getLoginUserInfo(token, userRole);
