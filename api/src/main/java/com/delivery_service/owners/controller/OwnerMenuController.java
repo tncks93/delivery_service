@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @AllArgsConstructor
@@ -57,7 +56,7 @@ public class OwnerMenuController {
   @PatchMapping("/{menuId}/status")
   public ResponseEntity<CommonResponse<MenuStatusDto>> updateMenuStatus(
       @User(role = UserRole.Owner) Owner owner,
-      @RequestParam("menuId") int menuId, MenuStatusDto menuStatusDto) {
+      @PathVariable("menuId") int menuId, MenuStatusDto menuStatusDto) {
     Boolean isOnSale = ownerMenuService.updateMenuStatus(owner.getShopId(), menuId,
         menuStatusDto.convertToEntity());
 
