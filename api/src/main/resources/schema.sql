@@ -29,6 +29,13 @@ CREATE TABLE IF NOT EXISTS owner
     shop_id INT
 );
 
+CREATE TABLE IF NOT EXISTS customer
+(
+    id      INT PRIMARY KEY AUTO_INCREMENT,
+    name    VARCHAR(20)  NOT NULL,
+    address VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS login_user
 (
     token   VARCHAR(36) PRIMARY KEY,
