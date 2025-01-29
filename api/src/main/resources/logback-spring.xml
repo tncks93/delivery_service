@@ -9,14 +9,15 @@
     </encoder>
   </appender>
 
-  <logger name="org.hibernate.SQL" level="DEBUG">
+  <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
     <appender-ref ref="STDOUT"/>
   </logger>
-  <logger name="com.delivery_service" level="DEBUG">
+  <logger name="com.delivery_service" level="DEBUG" additivity="false">
     <appender-ref ref="STDOUT"/>
   </logger>
 
-  <root level="DEBUG">
+
+  <root level="INFO">
     <appender-ref ref="STDOUT"/>
   </root>
 </configuration>

@@ -1,5 +1,6 @@
-package com.delivery_service.common.entity;
+package com.delivery_service.common.dto;
 
+import com.delivery_service.common.entity.LoginUser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

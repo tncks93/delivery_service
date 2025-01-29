@@ -2,8 +2,8 @@ package com.delivery_service.common.resolver;
 
 import com.delivery_service.common.UserRole;
 import com.delivery_service.common.annotation.User;
-import com.delivery_service.common.entity.LoginUserInfo;
 import com.delivery_service.common.facade.LoginUserInfoFacade;
+import com.delivery_service.owners.entity.Owner;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class LoginUserInfoArgumentResolver implements HandlerMethodArgumentResol
     boolean hasUserAnnotation = parameter.hasParameterAnnotation(User.class);
 
     //TODO Customer.class Rider.class 추가
-    boolean isLoginUserInfo = LoginUserInfo.class.isAssignableFrom(parameter.getParameterType());
+    boolean isLoginUserInfo = Owner.class.isAssignableFrom(parameter.getParameterType());
     log.debug("hasUserAnnotation = {}, isLoginUserInfo = {}", hasUserAnnotation,
         isLoginUserInfo);
 
@@ -45,10 +45,11 @@ public class LoginUserInfoArgumentResolver implements HandlerMethodArgumentResol
 
       String token = getToken(authorization);
 
-      return loginUserInfoFacade.getLoginUserInfo(userRole, token);
+      return loginUserInfoFacade.getLoginUserInfo(userRole, token, userRole.getClazz()).getUser();
     }
     return null;
   }
+
 
   private String getToken(String authorization) {
 

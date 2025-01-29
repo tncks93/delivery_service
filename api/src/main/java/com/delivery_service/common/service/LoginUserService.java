@@ -1,5 +1,6 @@
 package com.delivery_service.common.service;
 
+import com.delivery_service.common.UserRole;
 import com.delivery_service.common.entity.LoginUser;
 import com.delivery_service.common.repository.LoginUserRepository;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,10 @@ public class LoginUserService {
 
   public LoginUser getLoginUser(String token) {
     return repository.findById(token).get();
+  }
+
+  public LoginUser getLoginUserByRoleAndUserId(UserRole role, Integer userId) {
+    return repository.findByRoleAndUserId(role, userId).get();
   }
 
 }

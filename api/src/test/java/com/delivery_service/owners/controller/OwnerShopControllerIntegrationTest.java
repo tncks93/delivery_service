@@ -2,11 +2,13 @@ package com.delivery_service.owners.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.delivery_service.common.UserRole;
+import com.delivery_service.common.facade.LoginUserInfoFacade;
 import com.delivery_service.common.response.CommonResponse;
 import com.delivery_service.owners.dto.ShopInfoDto;
 import com.delivery_service.owners.dto.ShopRegisterDto;
 import com.delivery_service.owners.dto.ShopStatusDto;
-import com.delivery_service.owners.repository.OwnerShopRepository;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,27 +17,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
+@Sql(scripts = "/before-test.sql")
 class OwnerShopControllerIntegrationTest {
 
   @Autowired
   private TestRestTemplate testRestTemplate;
 
   @Autowired
-  private OwnerShopRepository ownerShopRepository;
+  private LoginUserInfoFacade loginUserInfoFacade;
 
-  private final String TYPE_OWNER = "owner";
-  private final String ownerId = "1";
+  @Autowired
+  private RedisTemplate<String, String> redisTemplate;
 
   @AfterEach
   void afterEach() {
-    ownerShopRepository.clear();
+    redisTemplate.getConnectionFactory().getConnection().flushDb();
+
+  }
+
+  String setLoginInfo() {
+    String token = UUID.randomUUID().toString();
+    log.debug("token={}", token);
+    UserRole role = UserRole.Owner;
+    loginUserInfoFacade.saveLoginUserInfo(role, token, role.getClazz(), 1);
+    return token;
   }
 
   @Test
@@ -48,9 +63,12 @@ class OwnerShopControllerIntegrationTest {
     shopRegisterDto.setCategory("패스트푸드");
     shopRegisterDto.setAddress("서울시 강서구 양천로23길 9");
 
-    HttpEntity<ShopRegisterDto> addShopRequest = new HttpEntity<>(shopRegisterDto);
-    ResponseEntity<CommonResponse<ShopInfoDto>> addShopResult = testRestTemplate.withBasicAuth(
-            TYPE_OWNER, ownerId)
+    String token = setLoginInfo();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(token);
+
+    HttpEntity<ShopRegisterDto> addShopRequest = new HttpEntity<>(shopRegisterDto, headers);
+    ResponseEntity<CommonResponse<ShopInfoDto>> addShopResult = testRestTemplate
         .exchange("/owners/shops", HttpMethod.POST, addShopRequest,
             new ParameterizedTypeReference<CommonResponse<ShopInfoDto>>() {
             });
@@ -70,12 +88,14 @@ class OwnerShopControllerIntegrationTest {
   @Test
   @DisplayName("Owner의 가게 조회 API")
   void getShop() {
-
     ShopInfoDto addedShopInfoDto = getAddedShopInfoDto();
 
-    HttpEntity<Void> getShopRequest = new HttpEntity(null, null);
-    ResponseEntity<CommonResponse<ShopInfoDto>> getShopResult = testRestTemplate.withBasicAuth(
-            TYPE_OWNER, ownerId)
+    String token = setLoginInfo();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(token);
+
+    HttpEntity<Void> getShopRequest = new HttpEntity(null, headers);
+    ResponseEntity<CommonResponse<ShopInfoDto>> getShopResult = testRestTemplate
         .exchange("/owners/shops", HttpMethod.GET, getShopRequest,
             new ParameterizedTypeReference<CommonResponse<ShopInfoDto>>() {
             });
@@ -107,9 +127,12 @@ class OwnerShopControllerIntegrationTest {
     shopInfoDtoToUpdate.setIsOpen(false);
     shopInfoDtoToUpdate.setCategory("패스트푸드");
 
-    HttpEntity<ShopInfoDto> updateShopRequest = new HttpEntity<>(shopInfoDtoToUpdate);
-    ResponseEntity<CommonResponse<ShopInfoDto>> updateShopResult = testRestTemplate.withBasicAuth(
-            TYPE_OWNER, ownerId)
+    String token = setLoginInfo();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(token);
+
+    HttpEntity<ShopInfoDto> updateShopRequest = new HttpEntity<>(shopInfoDtoToUpdate, headers);
+    ResponseEntity<CommonResponse<ShopInfoDto>> updateShopResult = testRestTemplate
         .exchange("/owners/shops", HttpMethod.PUT, updateShopRequest,
             new ParameterizedTypeReference<CommonResponse<ShopInfoDto>>() {
             });
@@ -134,9 +157,13 @@ class OwnerShopControllerIntegrationTest {
     Boolean isNowOpen = addedShopInfoDto.getIsOpen();
     ShopStatusDto shopStatusDtoToUpdate = new ShopStatusDto(addedShopInfoDto.getId(), !isNowOpen);
 
-    HttpEntity<ShopStatusDto> updateShopStatusRequest = new HttpEntity<>(shopStatusDtoToUpdate);
-    ResponseEntity<CommonResponse<ShopStatusDto>> updateShopResult = testRestTemplate.withBasicAuth(
-            TYPE_OWNER, ownerId)
+    String token = setLoginInfo();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(token);
+
+    HttpEntity<ShopStatusDto> updateShopStatusRequest = new HttpEntity<>(shopStatusDtoToUpdate,
+        headers);
+    ResponseEntity<CommonResponse<ShopStatusDto>> updateShopResult = testRestTemplate
         .exchange("/owners/shops/status", HttpMethod.PATCH, updateShopStatusRequest,
             new ParameterizedTypeReference<CommonResponse<ShopStatusDto>>() {
             });
@@ -156,9 +183,12 @@ class OwnerShopControllerIntegrationTest {
     shopRegisterDto.setCategory("패스트푸드");
     shopRegisterDto.setAddress("서울시 강서구 양천로23길 9");
 
-    HttpEntity<ShopRegisterDto> addShopRequest = new HttpEntity<>(shopRegisterDto);
-    ResponseEntity<CommonResponse<ShopInfoDto>> addShopResult = testRestTemplate.withBasicAuth(
-            TYPE_OWNER, ownerId)
+    String token = setLoginInfo();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(token);
+
+    HttpEntity<ShopRegisterDto> addShopRequest = new HttpEntity<>(shopRegisterDto, headers);
+    ResponseEntity<CommonResponse<ShopInfoDto>> addShopResult = testRestTemplate
         .exchange("/owners/shops", HttpMethod.POST, addShopRequest,
             new ParameterizedTypeReference<CommonResponse<ShopInfoDto>>() {
             });
