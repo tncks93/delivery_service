@@ -11,6 +11,18 @@ CREATE TABLE IF NOT EXISTS shop
     is_open     BOOLEAN DEFAULT FALSE
 );
 
+CREATE TABLE IF NOT EXISTS menu
+(
+    id          INT PRIMARY KEY AUTO_INCREMENT,
+    name        VARCHAR(20) NOT NULL,
+    image       VARCHAR(255),
+    description TEXT        NOT NULL,
+    price       INT         NOT NULL,
+    is_on_sale  BOOLEAN DEFAULT TRUE,
+    shop_id     INT         NOT NULL,
+    FOREIGN KEY (shop_id) REFERENCES shop (id)
+);
+
 CREATE TABLE IF NOT EXISTS owner
 (
     id      INT PRIMARY KEY AUTO_INCREMENT,
