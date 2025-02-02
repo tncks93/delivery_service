@@ -3,6 +3,7 @@ package com.delivery_service.owners.facade;
 import com.delivery_service.common.UserRole;
 import com.delivery_service.common.dto.LoginUserInfo;
 import com.delivery_service.common.entity.LoginUser;
+import com.delivery_service.common.service.ImageUrlService;
 import com.delivery_service.common.service.LoginUserInfoCacheService;
 import com.delivery_service.common.service.LoginUserService;
 import com.delivery_service.owners.entity.Owner;
@@ -22,6 +23,7 @@ public class OwnerShopFacade {
   private final OwnerShopService ownerShopService;
   private final LoginUserService loginUserService;
   private final LoginUserInfoCacheService loginUserInfoCacheService;
+  private final ImageUrlService imageUrlService;
 
   public Shop addShop(Owner owner, Shop shop) {
     Shop savedShop = ownerShopService.addShop(owner, shop);
@@ -45,6 +47,14 @@ public class OwnerShopFacade {
 
   public Boolean updateShopStatus(Owner owner, Boolean isOpen) {
     return ownerShopService.updateShopStatus(owner, isOpen);
+  }
+
+  public String getShopImageUploadUrl(String originalImageName) {
+    return imageUrlService.getPresignedUrl(ImageUrlService.USAGE_SHOP, originalImageName);
+  }
+
+  public String getShopImageDownloadUrl(String presignedUrl) {
+    return imageUrlService.getPublicUrl(presignedUrl);
   }
 
 

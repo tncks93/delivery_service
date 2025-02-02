@@ -23,3 +23,6 @@ spring:
       host: localhost
       port: 6379
 
+  config:
+    import: classpath:api-key.yml
+
