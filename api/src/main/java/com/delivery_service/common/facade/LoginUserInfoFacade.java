@@ -5,12 +5,13 @@ import com.delivery_service.common.dto.LoginUserInfo;
 import com.delivery_service.common.entity.LoginUser;
 import com.delivery_service.common.service.LoginUserInfoCacheService;
 import com.delivery_service.common.service.LoginUserService;
+import com.delivery_service.customers.entity.Customer;
+import com.delivery_service.customers.service.CustomerService;
 import com.delivery_service.owners.entity.Owner;
 import com.delivery_service.owners.service.OwnerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @AllArgsConstructor
@@ -20,8 +21,8 @@ public class LoginUserInfoFacade {
   private final LoginUserInfoCacheService loginUserInfoCacheService;
   private final LoginUserService loginUserService;
   private final OwnerService ownerService;
+  private final CustomerService customerService;
 
-  @Transactional
   public <T> LoginUserInfo<T> getLoginUserInfo(UserRole userRole, String token, Class<T> clazz) {
 
     LoginUserInfo<T> cache = loginUserInfoCacheService.getLoginUserInfo(token, userRole);
@@ -42,7 +43,8 @@ public class LoginUserInfoFacade {
           user = clazz.cast(owner);
 
         case Customer:
-
+          Customer customer = customerService.getCustomer(loginUser.getUserId());
+          user = clazz.cast(customer);
           break;
 
         case Rider:
@@ -54,7 +56,7 @@ public class LoginUserInfoFacade {
 
     }
 
-    //캐시,db 둘 다 없을때
+    //캐시,db 둘 다 없을때 (LoginUserNotFoundException)
     return null;
   }
 
@@ -69,6 +71,7 @@ public class LoginUserInfoFacade {
         user = clazz.cast(ownerService.getOwner(userId));
         break;
       case Customer:
+        user = clazz.cast(customerService.getCustomer(userId));
         break;
       case Rider:
         break;
