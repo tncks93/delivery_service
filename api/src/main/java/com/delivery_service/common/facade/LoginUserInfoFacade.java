@@ -1,8 +1,8 @@
 package com.delivery_service.common.facade;
 
-import com.delivery_service.common.UserRole;
 import com.delivery_service.common.dto.LoginUserInfo;
 import com.delivery_service.common.entity.LoginUser;
+import com.delivery_service.common.enumeration.UserRole;
 import com.delivery_service.common.service.LoginUserInfoCacheService;
 import com.delivery_service.common.service.LoginUserService;
 import com.delivery_service.customers.entity.Customer;
@@ -35,29 +35,25 @@ public class LoginUserInfoFacade {
     //캐시에 없을 때 db에서 select
     log.debug("cache miss key={}", token);
     LoginUser loginUser = loginUserService.getLoginUser(token);
-    if (loginUser != null) {
-      T user = null;
-      switch (userRole) {
-        case Owner:
-          Owner owner = ownerService.getOwner(loginUser.getUserId());
-          user = clazz.cast(owner);
 
-        case Customer:
-          Customer customer = customerService.getCustomer(loginUser.getUserId());
-          user = clazz.cast(customer);
-          break;
+    T user = null;
+    switch (userRole) {
+      case Owner:
+        Owner owner = ownerService.getOwner(loginUser.getUserId());
+        user = clazz.cast(owner);
 
-        case Rider:
-          break;
+      case Customer:
+        Customer customer = customerService.getCustomer(loginUser.getUserId());
+        user = clazz.cast(customer);
+        break;
 
-      }
-
-      return new LoginUserInfo<T>(loginUser, user);
+      case Rider:
+        break;
 
     }
 
-    //캐시,db 둘 다 없을때 (LoginUserNotFoundException)
-    return null;
+    return new LoginUserInfo<T>(loginUser, user);
+
   }
 
   public <T> T saveLoginUserInfo(UserRole userRole, String token, Class<T> clazz, Integer userId) {
