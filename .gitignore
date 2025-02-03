@@ -7,3 +7,6 @@ build
 
 # 인텔리제이 파일
 .idea
+
+# api키
+api-key.yml
