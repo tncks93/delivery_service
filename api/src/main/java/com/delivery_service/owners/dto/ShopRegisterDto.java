@@ -14,6 +14,7 @@ public class ShopRegisterDto {
   private String description;
   private String address;
   private String category;
+  private String image;
 
   public Shop convertToEntity() {
     Shop entity = new Shop();
@@ -22,6 +23,7 @@ public class ShopRegisterDto {
     entity.setAddress(address);
     entity.setIsOpen(false);
     entity.setCategory(category);
+    entity.setImage(image);
 
     return entity;
   }

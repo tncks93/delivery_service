@@ -37,6 +37,7 @@ public class OwnerShopFacade {
     return savedShop;
   }
 
+
   public Shop getShop(Owner owner) {
     return ownerShopService.getShop(owner);
   }
@@ -47,14 +48,6 @@ public class OwnerShopFacade {
 
   public Boolean updateShopStatus(Owner owner, Boolean isOpen) {
     return ownerShopService.updateShopStatus(owner, isOpen);
-  }
-
-  public String getShopImageUploadUrl(String originalImageName) {
-    return imageUrlService.getPresignedUrl(ImageUrlService.USAGE_SHOP, originalImageName);
-  }
-
-  public String getShopImageDownloadUrl(String presignedUrl) {
-    return imageUrlService.getPublicUrl(presignedUrl);
   }
 
 

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class CustomerMenuService {
+public class MenuService {
 
   private final CustomerMenuRepository repository;
 
