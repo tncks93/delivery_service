@@ -1,7 +1,8 @@
 package com.delivery_service.common.resolver;
 
-import com.delivery_service.common.UserRole;
 import com.delivery_service.common.annotation.User;
+import com.delivery_service.common.enumeration.UserRole;
+import com.delivery_service.common.exception.LoginRequiredException;
 import com.delivery_service.common.facade.LoginUserInfoFacade;
 import com.delivery_service.customers.entity.Customer;
 import com.delivery_service.owners.entity.Owner;
@@ -49,7 +50,7 @@ public class LoginUserInfoArgumentResolver implements HandlerMethodArgumentResol
 
       return loginUserInfoFacade.getLoginUserInfo(userRole, token, userRole.getClazz()).getUser();
     }
-    return null;
+    throw new LoginRequiredException("login required");
   }
 
 

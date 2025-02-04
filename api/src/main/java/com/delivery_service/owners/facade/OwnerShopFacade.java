@@ -1,8 +1,8 @@
 package com.delivery_service.owners.facade;
 
-import com.delivery_service.common.UserRole;
 import com.delivery_service.common.dto.LoginUserInfo;
 import com.delivery_service.common.entity.LoginUser;
+import com.delivery_service.common.enumeration.UserRole;
 import com.delivery_service.common.service.ImageUrlService;
 import com.delivery_service.common.service.LoginUserInfoCacheService;
 import com.delivery_service.common.service.LoginUserService;
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @AllArgsConstructor
 @Component
-@Transactional
 public class OwnerShopFacade {
 
   private final OwnerService ownerService;
@@ -25,6 +24,7 @@ public class OwnerShopFacade {
   private final LoginUserInfoCacheService loginUserInfoCacheService;
   private final ImageUrlService imageUrlService;
 
+  @Transactional
   public Shop addShop(Owner owner, Shop shop) {
     Shop savedShop = ownerShopService.addShop(owner, shop);
     owner.setShopId(savedShop.getId());

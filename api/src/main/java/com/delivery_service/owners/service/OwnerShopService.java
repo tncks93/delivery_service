@@ -1,5 +1,8 @@
 package com.delivery_service.owners.service;
 
+import com.delivery_service.common.exception.MismatchedShopOwnerException;
+import com.delivery_service.common.exception.ShopAlreadyExistsException;
+import com.delivery_service.common.exception.ShopNotFoundException;
 import com.delivery_service.owners.entity.Owner;
 import com.delivery_service.owners.entity.Shop;
 import com.delivery_service.owners.repository.OwnerShopRepository;
@@ -15,7 +18,7 @@ public class OwnerShopService {
 
   public Shop addShop(Owner owner, Shop shop) {
     if (owner.getShopId() != null) {
-      return null;
+      throw new ShopAlreadyExistsException("Owner already has a shop");
     }
 
     Shop savedShop = repository.save(shop);
@@ -24,35 +27,32 @@ public class OwnerShopService {
   }
 
   public Shop getShop(Owner owner) {
-    if (owner.getShopId() == null) {
-      return null;
-    }
-    return repository.findById(owner.getShopId()).get();
+    return repository.findById(owner.getShopId())
+        .orElseThrow(() -> new ShopNotFoundException(owner.getShopId()));
   }
 
   public Shop updateShop(Owner owner, Shop updatedShop) {
     if (!updatedShop.getId().equals(owner.getShopId())) {
-      return null;
+      throw new MismatchedShopOwnerException("Owner shop id doesn't match");
     }
     Optional<Shop> optionalShop = repository.findById(owner.getId());
-    if (optionalShop.isPresent()) {
-      Shop shop = optionalShop.get();
-      shop.setName(updatedShop.getName());
-      shop.setDescription(updatedShop.getDescription());
-      //TODO address가 바뀌면 latitude,longitude도 바뀌어야 한다.
-      shop.setAddress(updatedShop.getAddress());
-      shop.setCategory(updatedShop.getCategory());
-      shop.setImage(updatedShop.getImage());
+    Shop shop = optionalShop.orElseThrow(() -> new ShopNotFoundException(owner.getId()));
 
-      return shop;
-    }
+    shop.setName(updatedShop.getName());
+    shop.setDescription(updatedShop.getDescription());
+    //TODO address가 바뀌면 latitude,longitude도 바뀌어야 한다.
+    shop.setAddress(updatedShop.getAddress());
+    shop.setCategory(updatedShop.getCategory());
+    shop.setImage(updatedShop.getImage());
 
-    return null;
+    return shop;
+
 
   }
 
   public Boolean updateShopStatus(Owner owner, Boolean isOpen) {
-    Shop shop = repository.findById(owner.getShopId()).get();
+    Shop shop = repository.findById(owner.getShopId())
+        .orElseThrow(() -> new ShopNotFoundException(owner.getShopId()));
     shop.setIsOpen(isOpen);
     return shop.getIsOpen();
   }
