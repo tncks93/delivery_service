@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class LoginUserExceptionAdvice {
 
   @ExceptionHandler(LoginRequiredException.class)
-  public ResponseEntity<CommonResponse<Object>> handleLoginRequiredException(
+  public ResponseEntity<CommonResponse<Void>> handleLoginRequiredException(
       LoginRequiredException e) {
 
     return new ResponseEntity<>(CommonResponse.fail(e.getMessage()), HttpStatus.UNAUTHORIZED);

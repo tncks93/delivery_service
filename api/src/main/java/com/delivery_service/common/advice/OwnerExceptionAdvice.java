@@ -15,21 +15,21 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class OwnerExceptionAdvice {
 
   @ExceptionHandler(OwnerNotFoundException.class)
-  public ResponseEntity<CommonResponse<Object>> handleOwnerNotFoundException(
+  public ResponseEntity<CommonResponse<Void>> handleOwnerNotFoundException(
       OwnerNotFoundException e) {
 
     return new ResponseEntity<>(CommonResponse.fail(e.getMessage()), HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler(MismatchedShopOwnerException.class)
-  public ResponseEntity<CommonResponse<Object>> handleMismatchedShopOwnerException(
+  public ResponseEntity<CommonResponse<Void>> handleMismatchedShopOwnerException(
       MismatchedShopOwnerException e) {
 
     return new ResponseEntity<>(CommonResponse.fail(e.getMessage()), HttpStatus.UNAUTHORIZED);
   }
 
   @ExceptionHandler(ShopAlreadyExistsException.class)
-  public ResponseEntity<CommonResponse<Object>> handleShopAlreadyExistsException(
+  public ResponseEntity<CommonResponse<Void>> handleShopAlreadyExistsException(
       ShopAlreadyExistsException e) {
 
     return new ResponseEntity<>(CommonResponse.fail(e.getMessage()), HttpStatus.BAD_REQUEST);
