@@ -1,8 +1,6 @@
 name: CI With Gradle
-run-name: ${{ github.actor }} is testing out GitHub Actions
 
 on:
-  push:
   pull_request:
 
 jobs:
@@ -33,8 +31,5 @@ jobs:
       - name: Set file permissions for Gradle
         run: chmod +x ./gradlew
 
-      - name: Build with Gradle Wrapper
-        run: ./gradlew build
-
-#      - name: Test with Gradle Wrapper
-#        run: ./gradlew test
+      - name: Test with Gradle Wrapper
+        run: ./gradlew test
