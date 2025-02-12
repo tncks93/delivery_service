@@ -1,9 +1,8 @@
 package com.delivery_service.owners.controller;
 
-import com.delivery_service.common.UserRole;
+import com.delivery_service.common.ImageUrlProvider;
 import com.delivery_service.common.annotation.User;
-import com.delivery_service.common.dto.ImageUploadReqDto;
-import com.delivery_service.common.dto.ImageUrlDto;
+import com.delivery_service.common.enumeration.UserRole;
 import com.delivery_service.common.response.CommonResponse;
 import com.delivery_service.owners.dto.ShopInfoDto;
 import com.delivery_service.owners.dto.ShopRegisterDto;
@@ -51,9 +50,10 @@ public class OwnerShopController {
     log.debug("owner = {}", owner);
     Shop shop = ownerShopFacade.getShop(owner);
     log.debug("shop = {}", shop);
-
+    ShopInfoDto shopInfoDto = ShopInfoDto.convertToDto(shop);
+    shopInfoDto.setImage(ImageUrlProvider.getPublicUrl(shopInfoDto.getImage()));
     CommonResponse<ShopInfoDto> response = CommonResponse.success(
-        ShopInfoDto.convertToDto(shop));
+        shopInfoDto);
 
     return new ResponseEntity<>(response, HttpStatus.OK);
 
@@ -84,20 +84,6 @@ public class OwnerShopController {
     shopStatusDto.setIsOpen(isOpen);
 
     CommonResponse<ShopStatusDto> response = CommonResponse.success(shopStatusDto);
-
-    return new ResponseEntity<>(response, HttpStatus.OK);
-  }
-
-  @PostMapping("/image-url")
-  public ResponseEntity<CommonResponse<ImageUrlDto>> getShopImageUrl(
-      @User(role = UserRole.Owner) Owner owner, @RequestBody ImageUploadReqDto imageUploadReqDto) {
-    String shopImageUploadUrl = ownerShopFacade.getShopImageUploadUrl(
-        imageUploadReqDto.getOriginalImageName());
-    String shopImageDownloadUrl = ownerShopFacade.getShopImageDownloadUrl(shopImageUploadUrl);
-
-    ImageUrlDto imageUrlDto = new ImageUrlDto(shopImageUploadUrl, shopImageDownloadUrl);
-
-    CommonResponse<ImageUrlDto> response = CommonResponse.success(imageUrlDto);
 
     return new ResponseEntity<>(response, HttpStatus.OK);
   }

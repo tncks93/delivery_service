@@ -36,25 +36,24 @@ public class OwnerShopService {
       throw new MismatchedShopOwnerException("Owner shop id doesn't match");
     }
     Optional<Shop> optionalShop = repository.findById(owner.getId());
-    Shop shop = optionalShop.orElseThrow(() -> new ShopNotFoundException(owner.getId()));
 
-    shop.setName(updatedShop.getName());
-    shop.setDescription(updatedShop.getDescription());
-    //TODO address가 바뀌면 latitude,longitude도 바뀌어야 한다.
-    shop.setAddress(updatedShop.getAddress());
-    shop.setCategory(updatedShop.getCategory());
-    shop.setImage(updatedShop.getImage());
-
-    return shop;
-
-
+    return optionalShop.map(shop -> {
+      shop.setName(updatedShop.getName());
+      shop.setDescription(updatedShop.getDescription());
+      //TODO address가 바뀌면 latitude,longitude도 바뀌어야 한다.
+      shop.setAddress(updatedShop.getAddress());
+      shop.setCategory(updatedShop.getCategory());
+      shop.setImage(updatedShop.getImage());
+      return shop;
+    }).orElseThrow(() -> new ShopNotFoundException(owner.getId()));
   }
 
   public Boolean updateShopStatus(Owner owner, Boolean isOpen) {
-    Shop shop = repository.findById(owner.getShopId())
-        .orElseThrow(() -> new ShopNotFoundException(owner.getShopId()));
-    shop.setIsOpen(isOpen);
-    return shop.getIsOpen();
+
+    return repository.findById(owner.getShopId()).map(shop -> {
+      shop.setIsOpen(isOpen);
+      return shop.getIsOpen();
+    }).orElseThrow(() -> new ShopNotFoundException(owner.getShopId()));
   }
 
 }

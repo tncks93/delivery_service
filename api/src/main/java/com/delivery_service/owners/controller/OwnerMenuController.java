@@ -1,11 +1,9 @@
 package com.delivery_service.owners.controller;
 
-import com.delivery_service.common.UserRole;
+import com.delivery_service.common.ImageUrlProvider;
 import com.delivery_service.common.annotation.User;
-import com.delivery_service.common.dto.ImageUploadReqDto;
-import com.delivery_service.common.dto.ImageUrlDto;
+import com.delivery_service.common.enumeration.UserRole;
 import com.delivery_service.common.response.CommonResponse;
-import com.delivery_service.common.service.ImageUrlService;
 import com.delivery_service.owners.dto.MenuInfoDto;
 import com.delivery_service.owners.dto.MenuRegisterDto;
 import com.delivery_service.owners.dto.MenuStatusDto;
@@ -32,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class OwnerMenuController {
 
   private final OwnerMenuService ownerMenuService;
-  private final ImageUrlService imageUrlService;
 
   @PostMapping
   public ResponseEntity<CommonResponse<MenuInfoDto>> addMenu(
@@ -76,28 +73,15 @@ public class OwnerMenuController {
     ArrayList<MenuInfoDto> MenusDto = new ArrayList<>();
     List<Menu> menus = ownerMenuService.getAllMenus(owner.getShopId());
     for (Menu menu : menus) {
-      MenusDto.add(MenuInfoDto.convertToDto(menu));
+      MenuInfoDto menuInfoDto = MenuInfoDto.convertToDto(menu);
+      menuInfoDto.setImage(ImageUrlProvider.getPublicUrl(menuInfoDto.getImage()));
+      MenusDto.add(menuInfoDto);
+
     }
 
     CommonResponse<ArrayList<MenuInfoDto>> response = CommonResponse.success(MenusDto);
 
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
-
-  @PostMapping("/image-url")
-  public ResponseEntity<CommonResponse<ImageUrlDto>> getShopImageUrl(
-      @User(role = UserRole.Owner) Owner owner, @RequestBody ImageUploadReqDto imageUploadReqDto) {
-
-    String shopImageUploadUrl = imageUrlService.getPresignedUrl(ImageUrlService.USAGE_MENU,
-        imageUploadReqDto.getOriginalImageName());
-    String shopImageDownloadUrl = imageUrlService.getPublicUrl(shopImageUploadUrl);
-
-    ImageUrlDto imageUrlDto = new ImageUrlDto(shopImageUploadUrl, shopImageDownloadUrl);
-
-    CommonResponse<ImageUrlDto> response = CommonResponse.success(imageUrlDto);
-
-    return new ResponseEntity<>(response, HttpStatus.OK);
-  }
-
 
 }

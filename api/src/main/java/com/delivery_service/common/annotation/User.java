@@ -1,6 +1,6 @@
 package com.delivery_service.common.annotation;
 
-import com.delivery_service.common.UserRole;
+import com.delivery_service.common.enumeration.UserRole;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -1,6 +1,6 @@
 package com.delivery_service.common.entity;
 
-import com.delivery_service.common.UserRole;
+import com.delivery_service.common.enumeration.UserRole;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

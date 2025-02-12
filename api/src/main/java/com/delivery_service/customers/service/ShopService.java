@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class CustomerShopService {
+public class ShopService {
 
   private final CustomerShopRepository repository;
 

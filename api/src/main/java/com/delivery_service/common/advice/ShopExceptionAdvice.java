@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ShopExceptionAdvice {
 
   @ExceptionHandler(ShopNotFoundException.class)
-  public ResponseEntity<CommonResponse<Object>> handleShopNotFoundException(
+  public ResponseEntity<CommonResponse<Void>> handleShopNotFoundException(
       ShopNotFoundException e) {
 
     return new ResponseEntity<>(CommonResponse.fail(e.getMessage()), HttpStatus.NOT_FOUND);

@@ -1,7 +1,7 @@
 package com.delivery_service.common.repository;
 
-import com.delivery_service.common.UserRole;
 import com.delivery_service.common.entity.LoginUser;
+import com.delivery_service.common.enumeration.UserRole;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,8 +1,8 @@
 package com.delivery_service.customers.controller;
 
 import com.delivery_service.common.response.CommonResponse;
-import com.delivery_service.customers.service.CustomerMenuService;
-import com.delivery_service.customers.service.CustomerShopService;
+import com.delivery_service.customers.service.MenuService;
+import com.delivery_service.customers.service.ShopService;
 import com.delivery_service.owners.dto.MenuInfoDto;
 import com.delivery_service.owners.dto.ShopInfoDto;
 import com.delivery_service.owners.entity.Menu;
@@ -12,32 +12,33 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/shops")
-public class CustomerShopController {
+public class ShopController {
 
-  private final CustomerShopService customerShopService;
-  private final CustomerMenuService customerMenuService;
+  private final ShopService shopService;
+  private final MenuService menuService;
 
-  @GetMapping("/${shopId}")
-  public ResponseEntity<CommonResponse<ShopInfoDto>> getShop(@PathVariable int shopId) {
-    Shop shop = customerShopService.getShop(shopId);
+  @GetMapping("/{shopId}")
+  public ResponseEntity<CommonResponse<ShopInfoDto>> getShop(
+      @PathVariable("shopId") Integer shopId) {
+    Shop shop = shopService.getShop(shopId);
     CommonResponse<ShopInfoDto> response = CommonResponse.success(ShopInfoDto.convertToDto(shop));
 
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  @GetMapping("/${shopId}/menus")
+  @GetMapping("/{shopId}/menus")
   public ResponseEntity<CommonResponse<ArrayList<MenuInfoDto>>> getShopMenus(
-      @PathVariable int shopId) {
+      @PathVariable("shopId") Integer shopId) {
     ArrayList<MenuInfoDto> MenusDto = new ArrayList<>();
-    List<Menu> menus = customerMenuService.getAllMenus(shopId);
+    List<Menu> menus = menuService.getAllMenus(shopId);
     for (Menu menu : menus) {
       MenusDto.add(MenuInfoDto.convertToDto(menu));
     }
@@ -47,11 +48,12 @@ public class CustomerShopController {
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  @GetMapping("/${shopId}/menus/${menuId}")
-  public ResponseEntity<CommonResponse<MenuInfoDto>> getShopMenu(@PathVariable int shopId,
-      @PathVariable int menuId) {
+  @GetMapping("/{shopId}/menus/{menuId}")
+  public ResponseEntity<CommonResponse<MenuInfoDto>> getShopMenu(
+      @PathVariable("shopId") Integer shopId,
+      @PathVariable("menuId") Integer menuId) {
     //shopId의 필요성...
-    Menu menu = customerMenuService.getMenu(menuId);
+    Menu menu = menuService.getMenu(menuId);
 
     CommonResponse<MenuInfoDto> response = CommonResponse.success(MenuInfoDto.convertToDto(menu));
     return new ResponseEntity<>(response, HttpStatus.OK);

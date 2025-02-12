@@ -1,5 +1,6 @@
 package com.delivery_service.common.service;
 
+import com.delivery_service.common.dto.ImageUrlDto;
 import java.time.Duration;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -20,20 +21,18 @@ public class ImageUrlService {
   @Value("${ncp.storage.bucket}")
   private String bucket;
   private final S3Presigner s3Presigner;
-  private final long expMinute = 60;
+  private final long expMinute = 30;
 
-  public static final String USAGE_SHOP = "shop";
-  public static final String USAGE_MENU = "menu";
 
-  public String getPresignedUrl(String usage, String originalImageName) {
-    String key = generateKey(usage, originalImageName);
+  public ImageUrlDto getImageUrlDto(String originalImageName) {
+    String key = generateKey(originalImageName);
 
     AwsRequestOverrideConfiguration override = AwsRequestOverrideConfiguration.builder()
         .putRawQueryParameter("x-amz-acl", "public-read")//업로드 후 public 읽기 설정
         .build();
 
     PutObjectPresignRequest putObjectPresignRequest = PutObjectPresignRequest.builder()
-        .signatureDuration(Duration.ofMinutes(expMinute)) // 10분 동안 유효
+        .signatureDuration(Duration.ofMinutes(expMinute)) // 30분 동안 유효
         .putObjectRequest(PutObjectRequest.builder()
             .bucket(bucket)
             .key(key)
@@ -45,18 +44,14 @@ public class ImageUrlService {
         putObjectPresignRequest);
     log.debug("presignedUrl={}", presignedRequest.url());
 
-    return presignedRequest.url().toString();
+    return new ImageUrlDto(presignedRequest.url().toString(), key);
   }
-
-  public String getPublicUrl(String presignedUrl) {
-    return presignedUrl.split("\\?")[0];
-  }
-
-  private String generateKey(String folder, String filename) {
+  
+  private String generateKey(String filename) {
     UUID uuid = UUID.randomUUID();
     String ext = filename.substring(filename.lastIndexOf("."));
 
-    return folder + "/" + uuid.toString() + ext;
+    return uuid.toString() + ext;
   }
 
 }
