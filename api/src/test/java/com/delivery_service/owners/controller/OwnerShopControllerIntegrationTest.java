@@ -2,7 +2,7 @@ package com.delivery_service.owners.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.delivery_service.common.UserRole;
+import com.delivery_service.common.enumeration.UserRole;
 import com.delivery_service.common.facade.LoginUserInfoFacade;
 import com.delivery_service.common.response.CommonResponse;
 import com.delivery_service.owners.dto.ShopInfoDto;
@@ -62,6 +62,7 @@ class OwnerShopControllerIntegrationTest {
     shopRegisterDto.setDescription("버거 맛있음");
     shopRegisterDto.setCategory("패스트푸드");
     shopRegisterDto.setAddress("서울시 강서구 양천로23길 9");
+    shopRegisterDto.setImage("image.jpg");
 
     String token = setLoginInfo();
     HttpHeaders headers = new HttpHeaders();
@@ -110,6 +111,9 @@ class OwnerShopControllerIntegrationTest {
     assertThat(shopInfoDto.getCategory()).isEqualTo(addedShopInfoDto.getCategory());
     assertThat(shopInfoDto.getAddress()).isEqualTo(addedShopInfoDto.getAddress());
     assertThat(shopInfoDto.getIsOpen()).isEqualTo(addedShopInfoDto.getIsOpen());
+    if (shopInfoDto.getImage() != null) {
+      log.debug("image={}", shopInfoDto.getImage());
+    }
 
   }
 
@@ -182,6 +186,7 @@ class OwnerShopControllerIntegrationTest {
     shopRegisterDto.setDescription("버거 맛있음");
     shopRegisterDto.setCategory("패스트푸드");
     shopRegisterDto.setAddress("서울시 강서구 양천로23길 9");
+    shopRegisterDto.setImage("image.jpg");
 
     String token = setLoginInfo();
     HttpHeaders headers = new HttpHeaders();
