@@ -78,7 +78,7 @@ public class OwnerShopController {
       @RequestBody ShopStatusDto shopStatusDto) {
 
     return CompletableFuture.supplyAsync(
-            () -> ownerShopFacade.updateShopStatus(owner, shopStatusDto.getIsOpen()))
+            () -> ownerShopFacade.updateShopStatus(owner, shopStatusDto.getIsOpen()), executorService)
         .thenApply((isOpen) -> {
           shopStatusDto.setIsOpen(isOpen);
           return shopStatusDto;
