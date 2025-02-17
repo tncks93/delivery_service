@@ -21,10 +21,9 @@ jobs:
         run: docker compose up -d
 
       - name: Wait for MySql & Redis to be Healthy
-        run:
+        run: |
           echo "Waiting for MySQL & Redis to be healthy..."
-          while [[ "$(docker ps --format '{{.Names}} {{.Status}}' | grep -E 'mysql|redis' | grep -vc 'healthy')" -ne 0 ]];
-          do
+          while [[ "$(docker ps --format '{{.Names}} {{.Status}}' | grep -E 'mysql|redis' | grep -vc 'healthy')" -ne 0 ]]; do
           echo "Still waiting..."
           sleep 5
           done
