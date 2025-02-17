@@ -28,6 +28,7 @@ jobs:
           docker ps --format '{{.Names}} {{.Status}}'
           sleep 5
           done
+          docker ps --format '{{.Names}} {{.Status}}'
           echo "All services are healthy!"
 
       - name: Set up JDK 17
