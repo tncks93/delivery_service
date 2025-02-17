@@ -10,11 +10,13 @@ import com.delivery_service.owners.entity.Shop;
 import com.delivery_service.owners.service.OwnerService;
 import com.delivery_service.owners.service.OwnerShopService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @AllArgsConstructor
 @Component
+@Slf4j
 public class OwnerShopFacade {
 
   private final OwnerService ownerService;
@@ -24,6 +26,7 @@ public class OwnerShopFacade {
 
   @Transactional
   public Shop addShop(Owner owner, Shop shop) {
+    log.debug("Thread={}", Thread.currentThread().getName());
     Shop savedShop = ownerShopService.addShop(owner, shop);
     owner.setShopId(savedShop.getId());
     ownerService.updateOwner(owner);

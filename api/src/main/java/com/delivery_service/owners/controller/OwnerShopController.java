@@ -8,8 +8,9 @@ import com.delivery_service.owners.dto.ShopInfoDto;
 import com.delivery_service.owners.dto.ShopRegisterDto;
 import com.delivery_service.owners.dto.ShopStatusDto;
 import com.delivery_service.owners.entity.Owner;
-import com.delivery_service.owners.entity.Shop;
 import com.delivery_service.owners.facade.OwnerShopFacade;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,63 +30,60 @@ import org.springframework.web.bind.annotation.RestController;
 public class OwnerShopController {
 
   private final OwnerShopFacade ownerShopFacade;
+  private final ExecutorService executorService;
 
 
   @PostMapping
-  public ResponseEntity<CommonResponse<ShopInfoDto>> addShop(
+  public CompletableFuture<ResponseEntity<CommonResponse<ShopInfoDto>>> addShop(
       @User(role = UserRole.Owner) Owner owner,
       @RequestBody ShopRegisterDto shopRegisterDto) {
-    log.debug("owner = {}, shopRegisterDto = {}", owner, shopRegisterDto);
-    Shop savedShop = ownerShopFacade.addShop(owner, shopRegisterDto.convertToEntity());
+    log.debug("thread={}", Thread.currentThread().getName());
 
-    CommonResponse<ShopInfoDto> response = CommonResponse.success(
-        ShopInfoDto.convertToDto(savedShop));
-
-    return new ResponseEntity<>(response, HttpStatus.CREATED);
+    return CompletableFuture.supplyAsync(
+            () -> ownerShopFacade.addShop(owner, shopRegisterDto.convertToEntity()), executorService)
+        .thenApply(savedShop -> CommonResponse.success(ShopInfoDto.convertToDto(savedShop)))
+        .thenApply(response -> new ResponseEntity<>(response, HttpStatus.CREATED));
   }
 
   @GetMapping
-  public ResponseEntity<CommonResponse<ShopInfoDto>> getShop(
+  public CompletableFuture<ResponseEntity<CommonResponse<ShopInfoDto>>> getShop(
       @User(role = UserRole.Owner) Owner owner) {
-    log.debug("owner = {}", owner);
-    Shop shop = ownerShopFacade.getShop(owner);
-    log.debug("shop = {}", shop);
-    ShopInfoDto shopInfoDto = ShopInfoDto.convertToDto(shop);
-    shopInfoDto.setImage(ImageUrlProvider.getPublicUrl(shopInfoDto.getImage()));
-    CommonResponse<ShopInfoDto> response = CommonResponse.success(
-        shopInfoDto);
 
-    return new ResponseEntity<>(response, HttpStatus.OK);
-
+    return CompletableFuture.supplyAsync(() -> ownerShopFacade.getShop(owner), executorService)
+        .thenApply(ShopInfoDto::convertToDto)
+        .thenApply((shopInfoDto) -> {
+          shopInfoDto.setImage(ImageUrlProvider.getPublicUrl(shopInfoDto.getImage()));
+          return shopInfoDto;
+        }).thenApply(CommonResponse::success)
+        .thenApply(response -> new ResponseEntity<>(response, HttpStatus.OK));
   }
 
+
   @PutMapping
-  public ResponseEntity<CommonResponse<ShopInfoDto>> updateShop(
+  public CompletableFuture<ResponseEntity<CommonResponse<ShopInfoDto>>> updateShop(
       @User(role = UserRole.Owner) Owner owner,
       @RequestBody ShopInfoDto shopInfoDto) {
-    log.debug("owner = {} shopInfoDto = {}", owner, shopInfoDto);
-    Shop updatedShop = ownerShopFacade.updateShop(owner, shopInfoDto.convertToEntity());
-    log.debug("updatedShop = {}", updatedShop);
 
-    CommonResponse<ShopInfoDto> response = CommonResponse.success(
-        ShopInfoDto.convertToDto(updatedShop));
-
-    return new ResponseEntity<>(response, HttpStatus.OK);
+    return CompletableFuture.supplyAsync(
+            () -> ownerShopFacade.updateShop(owner, shopInfoDto.convertToEntity()), executorService)
+        .thenApply(ShopInfoDto::convertToDto)
+        .thenApply(CommonResponse::success)
+        .thenApply(response -> new ResponseEntity<>(response, HttpStatus.OK));
 
   }
 
   @PatchMapping("/status")
-  public ResponseEntity<CommonResponse<ShopStatusDto>> updateShopStatus(
+  public CompletableFuture<ResponseEntity<CommonResponse<ShopStatusDto>>> updateShopStatus(
       @User(role = UserRole.Owner) Owner owner,
       @RequestBody ShopStatusDto shopStatusDto) {
-    log.debug("owner = {} shopStatusDto = {}", owner,
-        shopStatusDto);
-    Boolean isOpen = ownerShopFacade.updateShopStatus(owner, shopStatusDto.getIsOpen());
-    shopStatusDto.setIsOpen(isOpen);
 
-    CommonResponse<ShopStatusDto> response = CommonResponse.success(shopStatusDto);
+    return CompletableFuture.supplyAsync(
+            () -> ownerShopFacade.updateShopStatus(owner, shopStatusDto.getIsOpen()), executorService)
+        .thenApply((isOpen) -> {
+          shopStatusDto.setIsOpen(isOpen);
+          return shopStatusDto;
+        }).thenApply(CommonResponse::success)
+        .thenApply(response -> new ResponseEntity<>(response, HttpStatus.OK));
 
-    return new ResponseEntity<>(response, HttpStatus.OK);
   }
-
 }
