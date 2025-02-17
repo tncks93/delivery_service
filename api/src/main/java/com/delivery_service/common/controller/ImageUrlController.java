@@ -32,15 +32,5 @@ public class ImageUrlController {
         .thenApply(CommonResponse::success)
         .thenApply(res -> new ResponseEntity<>(res, HttpStatus.OK));
   }
-//  @PostMapping("/request/image-url")
-//  public ResponseEntity<CommonResponse<ImageUrlDto>> getShopImageUrl(
-//      @RequestBody ImageUploadReqDto imageUploadReqDto) {
-//
-//    ImageUrlDto imageUrlDto = imageUrlService.getImageUrlDto(
-//        imageUploadReqDto.getOriginalImageName());
-//
-//    CommonResponse<ImageUrlDto> response = CommonResponse.success(imageUrlDto);
-//
-//    return new ResponseEntity<>(response, HttpStatus.OK);
-//  }
+
 }
