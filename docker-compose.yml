@@ -20,7 +20,7 @@ services:
       interval: 1m30s
       timeout: 10s
       retries: 3
-      start_period: 15s
+      start_period: 30s
 
 
   redis:
@@ -35,7 +35,7 @@ services:
       interval: 1m30s
       timeout: 10s
       retries: 3
-      start_period: 15s
+      start_period: 30s
 
 
 volumes:
