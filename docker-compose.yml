@@ -15,6 +15,13 @@ services:
       - "3306:3306"
     volumes:
       - delivery-mysql-data:/var/libs/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot" ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
 
   redis:
     image:
@@ -23,6 +30,12 @@ services:
     restart: always
     ports:
       - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
 
 
 volumes:
