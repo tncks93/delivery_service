@@ -1,12 +1,12 @@
 package com.delivery_service.common.resolver;
 
-import com.delivery_service.common.annotation.User;
-import com.delivery_service.common.enumeration.UserRole;
-import com.delivery_service.common.exception.LoginRequiredException;
-import com.delivery_service.common.facade.LoginUserInfoFacade;
-import com.delivery_service.customers.entity.Customer;
-import com.delivery_service.owners.entity.Owner;
-import com.delivery_service.riders.entity.Rider;
+import com.delivery_service.annotation.User;
+import com.delivery_service.entity.Customer;
+import com.delivery_service.entity.Owner;
+import com.delivery_service.entity.Rider;
+import com.delivery_service.enumeration.UserRole;
+import com.delivery_service.exception.LoginRequiredException;
+import com.delivery_service.facade.LoginUserInfoFacade;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
