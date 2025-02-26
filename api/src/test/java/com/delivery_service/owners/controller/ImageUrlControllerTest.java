@@ -2,9 +2,9 @@ package com.delivery_service.owners.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.delivery_service.common.dto.ImageUploadReqDto;
-import com.delivery_service.common.dto.ImageUrlDto;
 import com.delivery_service.common.response.CommonResponse;
+import com.delivery_service.dto.ImageUploadReqDto;
+import com.delivery_service.dto.ImageUrlDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

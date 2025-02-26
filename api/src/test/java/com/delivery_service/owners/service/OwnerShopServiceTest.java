@@ -4,10 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import com.delivery_service.owners.dto.ShopRegisterDto;
-import com.delivery_service.owners.entity.Owner;
-import com.delivery_service.owners.entity.Shop;
-import com.delivery_service.owners.repository.OwnerShopRepository;
+import com.delivery_service.dto.ShopRegisterDto;
+import com.delivery_service.entity.Owner;
+import com.delivery_service.entity.Shop;
+import com.delivery_service.repository.owner.OwnerShopRepository;
+import com.delivery_service.service.owner.OwnerShopService;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
