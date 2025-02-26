@@ -2,7 +2,8 @@ package com.delivery_service.owners.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.delivery_service.owners.entity.Menu;
+import com.delivery_service.entity.Menu;
+import com.delivery_service.repository.owner.OwnerMenuRepository;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;

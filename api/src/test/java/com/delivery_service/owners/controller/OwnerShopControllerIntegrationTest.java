@@ -2,12 +2,12 @@ package com.delivery_service.owners.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.delivery_service.common.enumeration.UserRole;
-import com.delivery_service.common.facade.LoginUserInfoFacade;
 import com.delivery_service.common.response.CommonResponse;
-import com.delivery_service.owners.dto.ShopInfoDto;
-import com.delivery_service.owners.dto.ShopRegisterDto;
-import com.delivery_service.owners.dto.ShopStatusDto;
+import com.delivery_service.dto.ShopInfoDto;
+import com.delivery_service.dto.ShopRegisterDto;
+import com.delivery_service.dto.ShopStatusDto;
+import com.delivery_service.enumeration.UserRole;
+import com.delivery_service.facade.LoginUserInfoFacade;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
