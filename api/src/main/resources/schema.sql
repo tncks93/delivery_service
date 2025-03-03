@@ -43,4 +43,27 @@ CREATE TABLE IF NOT EXISTS login_user
     user_id INT         NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS 'order'
+(
+    id          INT PRIMARY KEY AUTO_INCREMENT,
+    order_num   VARCHAR(30)  NOT NULL,
+    shop_id     INT          NOT NULL,
+    customer_id INT          NOT NULL,
+    order_time  TIMESTAMP    NOT NULL,
+    total_price INT          NOT NULL,
+    status      VARCHAR(20)  NOT NULL,
+    address     VARCHAR(255) NOT NULL,
+    FOREIGN KEY (shop_id) REFERENCES shop (id),
+    FOREIGN KEY (customer_id) REFERENCES customer (id)
+);
+
+CREATE TABLE IF NOT EXISTS order_menu
+(
+    id       INT PRIMARY KEY AUTO_INCREMENT,
+    order_id INT         NOT NULL,
+    name     VARCHAR(20) NOT NULL,
+    price    INT         NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES `order` (id)
+);
+
 

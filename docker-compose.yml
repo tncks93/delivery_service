@@ -17,7 +17,7 @@ services:
       - delivery-mysql-data:/var/libs/mysql
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot" ]
-      interval: 1m30s
+      interval: 1m
       timeout: 10s
       retries: 3
       start_period: 30s
@@ -32,7 +32,26 @@ services:
       - "6379:6379"
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
-      interval: 1m30s
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  kafka:
+    image: bitnami/kafka:3.9.0
+    container_name: kafka_delivery
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+    ports:
+      - "9092:9092"
+    healthcheck:
+      test: [ "CMD", "kafka-topics.sh", "--bootstrap-server", "localhost:9092", "--list" ]
+      interval: 1m
       timeout: 10s
       retries: 3
       start_period: 30s
