@@ -23,6 +23,15 @@ spring:
       host: localhost
       port: 6379
 
+  #  kafka:
+  #    bootstrap-servers: localhost:9092
+  #    producer:
+  #      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+  #      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  #    consumer:
+  #      key-deserializer: org.apache.kafka.common.serialization.StringSerializer
+  #      value-deserializer: org.apache.kafka.common.serialization.StringSerializer
+
   config:
     import: classpath:api-key.yml
 
