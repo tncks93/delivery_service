@@ -13,6 +13,7 @@ public class OrderRequestDto {
 
   private Integer shopId;
   private Integer totalPrice;
+  private Integer deliveryFee;
   private String address;
   private Boolean isContactless;
   private List<OrderMenuDto> orderMenus;

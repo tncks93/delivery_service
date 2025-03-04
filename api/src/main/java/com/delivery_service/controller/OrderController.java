@@ -33,7 +33,7 @@ public class OrderController {
     return CompletableFuture.supplyAsync(
             () -> ongoingOrderService.requestOrder(customer, orderRequestDto.convertToEntity(),
                 orderRequestDto.convertToOrderMenuEntities(),
-                orderRequestDto.getIsContactless()), executorService)
+                orderRequestDto.getDeliveryFee(), orderRequestDto.getIsContactless()), executorService)
         .thenApply(OrderNumDto::new)
         .thenApply(CommonResponse::success)
         .thenApply(response -> new ResponseEntity<>(response, HttpStatus.ACCEPTED));
