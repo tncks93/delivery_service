@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS login_user
     user_id INT         NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS 'order'
+CREATE TABLE IF NOT EXISTS `order`
 (
     id          INT PRIMARY KEY AUTO_INCREMENT,
     order_num   VARCHAR(30)  NOT NULL,

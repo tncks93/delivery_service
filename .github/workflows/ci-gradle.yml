@@ -22,7 +22,7 @@ jobs:
       - name: Wait for MySql & Redis to be Healthy
         run: |
           echo "Waiting for MySQL & Redis to be healthy..."
-          while [[ "$(docker ps --format '{{.Names}} {{.Status}}' | grep -E 'mysql|redis' | grep -vc 'healthy')" -ne 0 ]]; do
+          while [[ "$(docker ps --format '{{.Names}} {{.Status}}' | grep -E 'mysql|redis|kafka' | grep -vc 'healthy')" -ne 0 ]]; do
           echo "Still waiting..."
           docker ps --format '{{.Names}} {{.Status}}'
           sleep 5
