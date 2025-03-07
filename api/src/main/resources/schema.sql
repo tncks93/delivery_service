@@ -31,9 +31,8 @@ CREATE TABLE IF NOT EXISTS owner
 
 CREATE TABLE IF NOT EXISTS customer
 (
-    id      INT PRIMARY KEY AUTO_INCREMENT,
-    name    VARCHAR(20)  NOT NULL,
-    address VARCHAR(255) NOT NULL
+    id   INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS login_user
@@ -43,16 +42,17 @@ CREATE TABLE IF NOT EXISTS login_user
     user_id INT         NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS `order`
+CREATE TABLE IF NOT EXISTS orders
 (
-    id          INT PRIMARY KEY AUTO_INCREMENT,
-    order_num   VARCHAR(30)  NOT NULL,
-    shop_id     INT          NOT NULL,
-    customer_id INT          NOT NULL,
-    order_time  TIMESTAMP    NOT NULL,
-    total_price INT          NOT NULL,
-    status      VARCHAR(20)  NOT NULL,
-    address     VARCHAR(255) NOT NULL,
+    id             VARCHAR(30) PRIMARY KEY,
+    shop_id        INT          NOT NULL,
+    customer_id    INT          NOT NULL,
+    total_price    INT          NOT NULL,
+    delivery_fee   INT          NOT NULL,
+    status         VARCHAR(20)  NOT NULL,
+    address        VARCHAR(255) NOT NULL,
+    is_contactless Boolean      NOT NULL,
+
     FOREIGN KEY (shop_id) REFERENCES shop (id),
     FOREIGN KEY (customer_id) REFERENCES customer (id)
 );
@@ -60,10 +60,16 @@ CREATE TABLE IF NOT EXISTS `order`
 CREATE TABLE IF NOT EXISTS order_menu
 (
     id       INT PRIMARY KEY AUTO_INCREMENT,
-    order_id INT         NOT NULL,
+    order_id VARCHAR(30) NOT NULL,
     name     VARCHAR(20) NOT NULL,
     price    INT         NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES `order` (id)
+    FOREIGN KEY (order_id) REFERENCES orders (id)
 );
 
+CREATE TABLE IF NOT EXISTS delivery
+(
+    id       INT PRIMARY KEY AUTO_INCREMENT,
+    order_id VARCHAR(30) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders (id)
+);
 
