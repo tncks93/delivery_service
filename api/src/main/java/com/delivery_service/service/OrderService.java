@@ -3,45 +3,59 @@ package com.delivery_service.service;
 import com.delivery_service.entity.Customer;
 import com.delivery_service.entity.Order;
 import com.delivery_service.entity.OrderMenu;
+import com.delivery_service.enumeration.OrderStatus;
+import com.delivery_service.event.RequestedOrderEvent;
 import com.delivery_service.exception.InvalidOrderException;
+import com.delivery_service.repository.OrderRepository;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Random;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class OngoingOrderService {
+@AllArgsConstructor
+public class OrderService {
 
-  public String requestOrder(Customer customer, Order order, List<OrderMenu> orderMenus,
-      Integer deliveryFee, Boolean isContactless) {
+  private final OrderRepository orderRepository;
+  private final KafkaTemplate<String, RequestedOrderEvent> kafkaTemplate;
+
+  public String requestOrder(Customer customer, Order order, List<OrderMenu> orderMenus) {
     //메뉴 합계와 오더 가격 일치 확인
-    validateOrderPrice(order, orderMenus, deliveryFee);
+    validateOrderPrice(order, orderMenus);
+
+    String orderNum = createOrderNum(order);
 
     order.setCustomerId(customer.getId());
-    String orderNum = createOrderNum(order);
-    order.setOrderNum(orderNum);
+    order.setId(orderNum);
+    order.setStatus(OrderStatus.REQUESTING.getStatus());
 
     //주문 요청 이벤트 발행
-
+    kafkaTemplate.send("order_requested", new RequestedOrderEvent(order, orderMenus));
     return orderNum;
   }
 
-  private void validateOrderPrice(Order order, List<OrderMenu> orderMenus, Integer deliveryFee) {
+  public Order saveOrder(Order order) {
+    return orderRepository.save(order);
+  }
+
+  private void validateOrderPrice(Order order, List<OrderMenu> orderMenus) {
     int totalMenuPrice = orderMenus.stream().mapToInt(OrderMenu::getPrice)
         .sum();
 
-    int calculatedPrice = totalMenuPrice + deliveryFee;
+    int calculatedPrice = totalMenuPrice + order.getDeliveryFee();
 
     if (order.getTotalPrice() != calculatedPrice) {
       throw new InvalidOrderException("invalid order request");
     }
   }
 
-  private String createOrderNum(Order order) {
+  public String createOrderNum(Order order) {
     String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     int randomLength = 6;
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyMMdd");

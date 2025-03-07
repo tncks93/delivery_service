@@ -6,24 +6,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 @Entity
-@Table(name = "order_menu")
-@ToString
-@Setter
-@Getter
-public class OrderMenu {
+@Table(name = "delivery")
+public class Delivery {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   @Column(name = "order_id")
   private String orderId;
-  private String name;
-  private Integer price;
-
 
 }

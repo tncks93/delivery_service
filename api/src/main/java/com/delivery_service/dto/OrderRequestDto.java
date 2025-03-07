@@ -23,6 +23,8 @@ public class OrderRequestDto {
     order.setShopId(shopId);
     order.setTotalPrice(totalPrice);
     order.setAddress(address);
+    order.setIsContactless(isContactless);
+    order.setDeliveryFee(deliveryFee);
 
     return order;
   }

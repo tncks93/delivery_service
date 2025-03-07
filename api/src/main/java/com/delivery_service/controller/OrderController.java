@@ -6,7 +6,7 @@ import com.delivery_service.dto.OrderNumDto;
 import com.delivery_service.dto.OrderRequestDto;
 import com.delivery_service.entity.Customer;
 import com.delivery_service.enumeration.UserRole;
-import com.delivery_service.service.OngoingOrderService;
+import com.delivery_service.service.OrderService;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 
   private final ExecutorService executorService;
-  private final OngoingOrderService ongoingOrderService;
+  private final OrderService orderService;
 
   @PostMapping("/request")
   public CompletableFuture<ResponseEntity<CommonResponse<OrderNumDto>>> requestOrder(
@@ -31,9 +31,9 @@ public class OrderController {
       OrderRequestDto orderRequestDto) {
 
     return CompletableFuture.supplyAsync(
-            () -> ongoingOrderService.requestOrder(customer, orderRequestDto.convertToEntity(),
-                orderRequestDto.convertToOrderMenuEntities(),
-                orderRequestDto.getDeliveryFee(), orderRequestDto.getIsContactless()), executorService)
+            () -> orderService.requestOrder(customer, orderRequestDto.convertToEntity(),
+                orderRequestDto.convertToOrderMenuEntities()),
+            executorService)
         .thenApply(OrderNumDto::new)
         .thenApply(CommonResponse::success)
         .thenApply(response -> new ResponseEntity<>(response, HttpStatus.ACCEPTED));
