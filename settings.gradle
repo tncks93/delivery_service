@@ -5,4 +5,5 @@ rootProject.name = 'delivery_service'
 //포한될 프로젝트
 include 'api'
 include 'status'
+include 'common'
 
