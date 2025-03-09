@@ -16,5 +16,12 @@ public class Delivery {
   private Integer id;
   @Column(name = "order_id")
   private String orderId;
-
+  @Column(name = "location_lat")
+  private Double locationLat;
+  @Column(name = "location_lon")
+  private Double locationLon;
+  @Column(name = "rider_id")
+  private Integer riderId;
+  @Column(name = "match_status")
+  private String matchStatus;
 }

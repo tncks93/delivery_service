@@ -1,0 +1,10 @@
+plugins {
+    id 'delivery_service.common.conventions'
+}
+
+bootJar {
+    enabled = false
+}
+
+
+

@@ -16,5 +16,17 @@ dependencies {
     implementation 'software.amazon.awssdk:s3'
 
 
+    //테스트용 라이브러리들
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+
+    implementation(project(':common'))
+
 }
+
+tasks.named('test', Test) {
+    //jvm에서 테스트 프레임워크 실행 런처
+    useJUnitPlatform()
+}
+
+
 
