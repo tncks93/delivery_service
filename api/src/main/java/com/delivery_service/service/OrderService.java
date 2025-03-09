@@ -9,6 +9,7 @@ import com.delivery_service.event.AcceptedOrderEvent;
 import com.delivery_service.event.RequestedOrderEvent;
 import com.delivery_service.exception.InvalidOrderException;
 import com.delivery_service.repository.OrderRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -25,8 +26,11 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class OrderService {
 
+  //service 나누자
   private final OrderRepository orderRepository;
+  private final OrderCacheService orderCacheService;
   private final KafkaTemplate<String, Object> kafkaTemplate;
+  private final ObjectMapper objectMapper;
 
   public String requestOrder(Customer customer, Order order, List<OrderMenu> orderMenus) {
     //메뉴 합계와 오더 가격 일치 확인
@@ -55,13 +59,16 @@ public class OrderService {
       order.setStatus(OrderStatus.COOKING.getStatus());
       LocalDateTime estimationCookingCompletionTime = calculateCookingCompleteTime(
           cookingDurationMin);
+
+      orderCacheService.updateOrderCacheStatus(order);
+
       kafkaTemplate.send("order_accepted",
           new AcceptedOrderEvent(order, estimationCookingCompletionTime));
 
     } else {
       //오더 거절시
       order.setStatus(OrderStatus.CANCELED.getStatus());
-
+      //캐시를 지워야하나?
       //취소 이벤트 처리는? 알림?
     }
 
@@ -104,5 +111,6 @@ public class OrderService {
     LocalDateTime now = LocalDateTime.now();
     return now.plusMinutes(cookingDurationMin);
   }
+
 
 }
