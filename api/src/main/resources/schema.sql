@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS delivery
     location_lat DOUBLE      NOT NULL,
     location_lon DOUBLE      NOT NULL,
     rider_id     INT,
-    match_status BOOLEAN DEFAULT FALSE,
+    match_status VARCHAR(40) DEFAULT FALSE,
     FOREIGN KEY (order_id) REFERENCES orders (id)
 );
 
