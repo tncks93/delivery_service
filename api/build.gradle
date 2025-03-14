@@ -7,10 +7,26 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    //kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     implementation platform("software.amazon.awssdk:bom:2.30.7")
     implementation 'software.amazon.awssdk:s3'
 
+
+    //테스트용 라이브러리들
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+
+    implementation(project(':common'))
+
 }
+
+tasks.named('test', Test) {
+    //jvm에서 테스트 프레임워크 실행 런처
+    useJUnitPlatform()
+}
+
+
 
