@@ -1,6 +1,7 @@
 package com.delivery_service.service;
 
 import com.delivery_service.dto.OrderDetail;
+import com.delivery_service.entity.Order;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,24 @@ public class OrderCacheService {
       //exception 처리?
       throw new RuntimeException(e);
     }
+  }
+
+  public void updateOrderCacheStatus(Order order) {
+
+    try {
+      String key = getKey(order.getId());
+      String cache = redisTemplate.opsForValue().get(key);
+      OrderDetail orderDetail = objectMapper.readValue(cache, OrderDetail.class);
+      orderDetail.getOrder().setStatus(order.getStatus());
+
+      redisTemplate.opsForValue().set(key, objectMapper.writeValueAsString(orderDetail));
+
+    } catch (JsonProcessingException e) {
+      //exception 처리 질문
+      throw new RuntimeException(e);
+    }
+
+
   }
 
   private String getKey(String orderId) {
